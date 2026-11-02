@@ -52,37 +52,50 @@
 
 <main>
 
-  <!-- A single centered card, no image or second column: this is a
-       quick utility page, not a marketing section, so it's kept short
-       and doesn't try to sell anything. Client/account access isn't
-       built yet (see js/site.js), so the form only gives visual
-       feedback for now, same treatment as the Contact form. -->
-  <section class="tone-white" style="padding-top:calc(var(--nav-h) + 80px); padding-bottom:120px; min-height:70vh; display:flex; align-items:center;">
-    <div class="wrap">
+  <!-- Client portal sign-in. A photograph on one side (the finished
+       result clients are waiting for), the form on the other; stacks to
+       form-only on phones. Sign-in is handled by js/portal.js, which
+       sends Steve to his dashboard and each client to their own
+       project page. -->
+  <section class="login-split">
+    <div class="login-photo img-block in" aria-hidden="true">
+      <img fetchpriority="high" src="images/projects/obsidian/05.jpg" alt=""/>
+      <p class="login-photo-caption">The Obsidian Residence, Bukit Timah</p>
+    </div>
+    <div class="login-pane">
       <div class="login-card reveal">
-        <nav class="breadcrumbs" aria-label="Breadcrumb" style="justify-content:center;"><a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current" aria-current="page">Log In</span></nav>
-        <div style="text-align:center; margin-bottom:40px;">
-          <span class="eyebrow" style="display:block; margin-bottom:14px;">Client Access</span>
-          <h1 class="headline split-line" style="margin:0;">Log In</h1>
-        </div>
-        <form id="loginForm">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current" aria-current="page">Log In</span></nav>
+        <h1 class="headline login-title">Your project, as it happens</h1>
+        <p class="body-copy login-lede">Sign in to see where your home is up to, the latest photos from site and your next visit with Steve.</p>
+
+        <p class="login-resume" id="loginResume" hidden>You're signed in as <span data-resume-name></span>. <a href="portal.html" class="text-link">Continue</a></p>
+
+        <form id="loginForm" novalidate>
           <div class="field">
-            <label for="lemail">Email Address</label>
+            <label for="lemail">Email address</label>
             <input id="lemail" name="lemail" type="email" autocomplete="email" placeholder="you@email.com" required/>
           </div>
           <div class="field" style="margin-bottom:12px;">
             <label for="lpassword">Password</label>
             <input id="lpassword" name="lpassword" type="password" autocomplete="current-password" placeholder="••••••••" required/>
           </div>
+          <p class="login-error" id="loginError" role="alert" hidden></p>
           <div class="login-meta-row">
-            <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--c-ink-soft); font-family:'Inter',sans-serif;">
-              <input type="checkbox" name="lremember" style="width:auto; margin:0;"/> Remember me
-            </label>
-            <a href="#">Forgot password?</a>
+            <span></span>
+            <a href="https://wa.me/6596950765" target="_blank" rel="noopener">Forgot password? Message Steve</a>
           </div>
-          <button type="submit" class="btn btn-fill" style="width:100%; border:none; margin-top:32px;">Log In</button>
+          <button type="submit" class="btn btn-fill" style="width:100%; border:none; margin-top:32px;">Sign in</button>
         </form>
-        <p class="login-note">Client accounts are coming soon. In the meantime, <a href="contact.html" class="text-link" style="border-bottom:none;">get in touch</a> and we'll help directly.</p>
+
+        <!-- Demo mode only: remove this block when real accounts go live. -->
+        <div class="login-demo">
+          <p>Preview mode. Try a sample account:</p>
+          <div class="login-demo-chips">
+            <button type="button" data-demo-email="steve@justbuildla.sg" data-demo-password="studio-demo">Steve (studio)</button>
+            <button type="button" data-demo-email="lim.family@demo.sg" data-demo-password="client-demo">Lim family (client)</button>
+            <button type="button" data-demo-email="rachel.chen@demo.sg" data-demo-password="client-demo">Rachel Chen (client)</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -126,5 +139,7 @@
 </footer>
 
 <script src="js/site.js"></script>
+<script src="js/portal-data.js"></script>
+<script src="js/portal.js"></script>
 </body>
 </html>

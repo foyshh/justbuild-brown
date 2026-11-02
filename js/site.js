@@ -461,18 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Log In form (visual feedback only, no account system behind it yet)
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = loginForm.querySelector('button[type="submit"]');
-      const original = btn.textContent;
-      btn.textContent = 'Coming Soon';
-      btn.style.opacity = '0.7';
-      setTimeout(() => { btn.textContent = original; btn.style.opacity = '1'; }, 2400);
-    });
-  }
+  // Log In form: handled by js/portal.js (client portal).
 
   // Animated stat counters (About page), count up quickly from 0 the
   // moment the panel enters view, then hold at the final value.
