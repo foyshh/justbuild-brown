@@ -27,7 +27,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "@id": "https://justbuild.com.sg/#business", "name": "Just Build", "image": "https://justbuild.com.sg/images/projects/obsidian/05.jpg", "url": "https://justbuild.com.sg/", "telephone": "+65 9695 0765", "email": "steve@justbuildla.sg", "priceRange": "$$$", "address": {"@type": "PostalAddress", "streetAddress": "35B Seah St", "addressLocality": "Singapore", "postalCode": "188391", "addressCountry": "SG"}, "sameAs": ["https://www.instagram.com/justbuildla_sg/"]}</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Marcellus+SC&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@400;500&family=Inter:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet"/>
 <link href="css/style.css" rel="stylesheet"/>
 </head>
 <body>
@@ -63,58 +63,47 @@
 
 <main>
 
-  <!-- Hero, landing screen plus four full-screen project slides. A wheel
-       notch, arrow key, or swipe moves to the next slide within one
-       fixed frame; the page itself doesn't scroll until either end is
-       reached, at which point it hands off to normal scrolling. -->
-  <section class="hero-jack" id="heroJack" aria-label="Introduction and selected projects">
-    <div class="hero-jack-slide is-active" data-slide="0">
-      <img fetchpriority="high" src="images/projects/obsidian/03.jpg" alt="The Obsidian Residence, double-height living room"/>
-      <div class="wrap hero-jack-landing">
-        <h1 class="headline hero-title" style="color:#fff; margin:0 0 30px;">
-          <span class="split-line hero-title-quiet">The Obsidian</span>
-          <span class="hero-title-accent">Residence</span>
-        </h1>
-        <a href="portfolio.html" class="quiet-cta" style="color:#fff;">View Portfolio <span>&#8250;</span></a>
-      </div>
+  <!-- Showcase: the work, full screen, and nothing else. One project
+       at a time, crossfading slowly on its own; the list along the
+       bottom names every project. Hovering a name shows that project,
+       clicking it (or the photograph) opens it. No zoom, no sliding,
+       just the dissolve. -->
+  <section class="showcase" id="showcase" aria-label="Selected projects">
+    <div class="showcase-slides">
+      <div class="showcase-slide is-active" data-href="projects/obsidian.html"><img fetchpriority="high" src="images/projects/obsidian/03.jpg" alt="The Obsidian Residence"/></div>
+      <div class="showcase-slide" data-href="projects/sundial.html"><img loading="lazy" src="images/projects/sundial/03.jpg" alt="The Sundial House"/></div>
+      <div class="showcase-slide" data-href="projects/cairnhill.html"><img loading="lazy" src="images/projects/cairnhill/01.jpg" alt="Cairnhill Bungalow"/></div>
+      <div class="showcase-slide" data-href="projects/lattice.html"><img loading="lazy" src="images/projects/lattice/01.jpg" alt="The Lattice House"/></div>
+      <div class="showcase-slide" data-href="projects/meridian.html"><img loading="lazy" src="images/projects/meridian/03.jpg" alt="The Meridian Office"/></div>
+      <div class="showcase-slide" data-href="projects/cobalt.html"><img loading="lazy" src="images/projects/cobalt/01.jpg" alt="The Cobalt Flat"/></div>
     </div>
+    <ol class="showcase-ticker wrap">
+      <li><a href="projects/obsidian.html" data-i="0" class="is-active" aria-current="true"><span class="showcase-name">The Obsidian Residence</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+      <li><a href="projects/sundial.html" data-i="1"><span class="showcase-name">The Sundial House</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+      <li><a href="projects/cairnhill.html" data-i="2"><span class="showcase-name">Cairnhill Bungalow</span><span class="showcase-meta">2023 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+      <li><a href="projects/lattice.html" data-i="3"><span class="showcase-name">The Lattice House</span><span class="showcase-meta">2023 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+      <li><a href="projects/meridian.html" data-i="4"><span class="showcase-name">The Meridian Office</span><span class="showcase-meta">2024 <i>|</i> Commercial</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+      <li><a href="projects/cobalt.html" data-i="5"><span class="showcase-name">The Cobalt Flat</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
+    </ol>
+  </section>
 
-    <div class="hero-jack-slide" data-slide="1">
-      <img loading="lazy" src="images/projects/obsidian/09.jpg" alt="The Obsidian Residence, Bukit Timah"/>
-      <div class="flip-info flip-info-minimal">
-        <a href="projects/obsidian.html" class="text-link">View Project</a>
+  <!-- The studio, in one line, set over a full-bleed photograph. -->
+  <section class="statement" aria-label="About the studio">
+    <img class="statement-bg" loading="lazy" src="images/projects/obsidian/05.jpg" alt=""/>
+    <div class="wrap statement-inner reveal">
+      <p class="statement-kicker">Just Build, Singapore</p>
+      <h2 class="statement-title"><span class="statement-caps">We make simple things</span><em>look good.</em></h2>
+      <p class="statement-copy">Architectural interiors for private residences, hotels and commercial spaces, designed and built by one studio, led by Steve Goh.</p>
+      <dl class="statement-facts">
+        <div><dt>15+</dt><dd>Years of craft</dd></div>
+        <div><dt>~50</dt><dd>Projects a year</dd></div>
+      </dl>
+      <div class="statement-sign">
+        <span class="signature" aria-hidden="true">Steve Goh</span>
+        <span class="statement-sign-role">Steve Goh, Founder &amp; Creative Lead</span>
       </div>
+      <a href="about.html" class="statement-link">About the studio</a>
     </div>
-
-    <div class="hero-jack-slide" data-slide="2">
-      <img loading="lazy" src="images/projects/obsidian/05.jpg" alt="The Obsidian Residence, dining table with florals"/>
-      <div class="flip-info flip-info-minimal">
-        <a href="projects/obsidian.html" class="text-link">View Project</a>
-      </div>
-    </div>
-
-    <div class="hero-jack-slide" data-slide="3">
-      <img loading="lazy" src="images/projects/obsidian/12.jpg" alt="The Obsidian Residence, Bukit Timah"/>
-      <div class="flip-info flip-info-minimal">
-        <a href="projects/obsidian.html" class="text-link">View Project</a>
-      </div>
-    </div>
-
-    <div class="hero-jack-slide" data-slide="4">
-      <img loading="lazy" src="images/projects/obsidian/02.jpg" alt="The Obsidian Residence, window seat detail"/>
-      <div class="flip-info flip-info-minimal">
-        <a href="projects/obsidian.html" class="text-link">View Project</a>
-      </div>
-    </div>
-
-    <span class="flip-hint" aria-hidden="true">Scroll</span>
-    <div class="flip-index" aria-hidden="true">
-      <span class="flip-index-current">ONE</span><span>/</span><span class="flip-index-total">05</span>
-    </div>
-    <div class="hero-jack-dots" role="tablist" aria-label="Jump to slide"></div>
-    <a href="#collections" class="hero-jack-skip" aria-label="Skip to Curated Collections">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 9L12 16L20 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
   </section>
 
   <!-- Curated Collections -->
@@ -225,6 +214,21 @@
       <div class="curated-more">
         <a href="portfolio.html" class="text-link">View Full Portfolio</a>
       </div>
+    </div>
+  </section>
+
+  <!-- How a project runs: four real, sequential steps (so numbered),
+       stepping down the page like a staircase on a dark espresso band.
+       The same four steps as the About page. -->
+  <section class="process-band">
+    <div class="wrap">
+      <h2 class="headline process-title reveal">One studio,<br>start to finish</h2>
+      <ol class="process-steps reveal">
+        <li><span class="process-num">1</span><div><h3>First conversation</h3><p>You tell us about the property, how you want to live or operate in it, and the budget.</p></div></li>
+        <li><span class="process-num">2</span><div><h3>Discovery and brief</h3><p>We visit the site, study the light and the structure, and agree the scope in writing.</p></div></li>
+        <li><span class="process-num">3</span><div><h3>Design development</h3><p>Layouts, materials and visuals, refined with you until every room is signed off.</p></div></li>
+        <li><span class="process-num">4</span><div><h3>Build and handover</h3><p>We manage every trade on site and hand you the finished space, ready to live in.</p></div></li>
+      </ol>
     </div>
   </section>
 
