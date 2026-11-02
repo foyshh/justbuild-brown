@@ -1262,13 +1262,14 @@ address { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 300
    the scope ends, the pinned photo is carried away with it.
    ======================================================== */
 .backdrop-scope { position: relative; background: #1A140D; color: #F2E8D4; }
-.backdrop {
-  position: sticky; top: 0; z-index: 0; overflow: hidden;
-  height: 100vh; height: 100svh; margin-bottom: -100vh; margin-bottom: -100svh;
-}
+/* .backdrop covers the whole scope (absolute), and the photo inside it
+   (.backdrop-pin) is sticky within that box, so the pinned photo can
+   never reach past the end of the scope into the sections after it. */
+.backdrop { position: absolute; inset: 0; z-index: 0; }
+.backdrop-pin { position: sticky; top: 0; overflow: hidden; height: 100vh; height: 100svh; }
 .backdrop-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .backdrop-shade { position: absolute; inset: 0; background: #160F09; opacity: var(--shade, 0.2); }
-.backdrop::after {
+.backdrop-pin::after {
   content: ''; position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(22,15,9,0.75) 0%, rgba(22,15,9,0.3) 40%, rgba(22,15,9,0) 70%, rgba(22,15,9,0.3) 100%);
 }
@@ -1282,3 +1283,15 @@ address { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 300
 :is(.band-dark, .backdrop-scope) .text-link:hover { border-bottom-color: #F2E8D4; }
 :is(.band-dark, .backdrop-scope) .script,
 :is(.band-dark, .backdrop-scope) .stat-num { color: #F2E8D4; }
+
+/* About: ethos + journey on a very light ivory band. */
+.band-light { background: #F6F1EA; }
+
+/* Press strip on the espresso band (About: As Featured In). */
+:is(.band-dark, .backdrop-scope) .press-card-name { color: #F2E8D4; }
+:is(.band-dark, .backdrop-scope) .press-card-name-link:hover .press-card-name { color: #fff; }
+:is(.band-dark, .backdrop-scope) .press-link { color: rgba(242,232,212,0.66); }
+:is(.band-dark, .backdrop-scope) .press-link:hover { color: #F2E8D4; border-color: #F2E8D4; }
+:is(.band-dark, .backdrop-scope) .press-card-frame { border-color: rgba(242,232,212,0.16); background: rgba(242,232,212,0.05); }
+:is(.band-dark, .backdrop-scope) .press-card-frame span { color: rgba(242,232,212,0.7); opacity: 1; }
+a.press-card-frame { text-decoration: none; color: inherit; }
