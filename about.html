@@ -66,8 +66,14 @@
 
   <!-- Banner: Steve, his line, and his signature, over a full-bleed
        photograph, the same treatment as the home page. -->
+  <!-- Photo backdrop: the banner photograph stays fixed in place while
+       everything inside this block scrolls up over it, the photo
+       darkening as you go (js/site.js). Once this block ends, the
+       photo scrolls away with it and the page carries on as normal. -->
+  <div class="backdrop-scope">
+    <div class="backdrop" aria-hidden="true"><img class="backdrop-img" fetchpriority="high" src="images/projects/obsidian/06.jpg" alt=""/><span class="backdrop-shade"></span></div>
+
   <section class="page-hero">
-    <img class="page-hero-bg" fetchpriority="high" src="images/projects/obsidian/06.jpg" alt=""/>
     <div class="wrap page-hero-inner reveal">
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current" aria-current="page">About</span></nav>
       <p class="page-hero-kicker">Founder &amp; Creative Lead</p>
@@ -111,6 +117,8 @@
       <p class="body-copy">Just Build is an independent interior design studio based in Singapore, built around a simple idea: a good space shouldn't need explaining. We strip away whatever a room doesn't need, so what's left feels effortless, even though getting there rarely is. That's what we mean when we say we make simple things look good, it isn't a slogan, it's how every project with us actually starts.</p>
     </div>
   </section>
+
+  </div>
 
   <!-- Our Design Ethos + Our Client Experience Journey: one section,
        two columns, rather than two separate stacked blocks, so the

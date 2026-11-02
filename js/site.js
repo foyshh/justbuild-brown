@@ -218,51 +218,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setCount = items.length / 3; // the real set, repeated three times over
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const SPEED_PX_S = 16;   // slow and steady — noticeably slower than the old fixed animation
-    const RESUME_DELAY_MS = 1000;
+    const SPEED_PX_S = 22;      // slow, steady drift
+    const RESUME_DELAY_MS = 1200;
 
     let lastInteraction = 0;
     let lastFrame = null;
+    let hovering = false;
 
     const setWidth = () => items[0].getBoundingClientRect().width * setCount
       + parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0') * setCount;
 
-    // Start in the middle copy so there's a full set to scroll into
-    // whichever direction the visitor goes first.
-    carousel.scrollLeft = setWidth();
+    // The drift is tracked in its own fractional position (pos) rather
+    // than by adding to scrollLeft directly: at ~0.4px a frame, many
+    // screens round scrollLeft back down to a whole pixel every frame,
+    // which silently stopped the strip from moving at all.
+    let pos = setWidth(); // start in the middle copy
+    carousel.scrollLeft = pos;
 
     const wrap = () => {
       const w = setWidth();
-      if (carousel.scrollLeft <= 0) carousel.scrollLeft += w;
-      else if (carousel.scrollLeft >= w * 2) carousel.scrollLeft -= w;
+      if (pos <= 0) pos += w;
+      else if (pos >= w * 2) pos -= w;
     };
 
     const markInteraction = () => { lastInteraction = performance.now(); };
     carousel.addEventListener('touchstart', markInteraction, { passive: true });
     carousel.addEventListener('touchmove', markInteraction, { passive: true });
     carousel.addEventListener('pointerdown', markInteraction);
+    // Hovering pauses the drift entirely; moving off resumes it from
+    // wherever the strip is.
+    carousel.addEventListener('mouseenter', () => { hovering = true; });
+    carousel.addEventListener('mouseleave', () => { hovering = false; markInteraction(); });
     // Wheel: only sideways motion (a trackpad swipe left/right, or
     // shift + mouse wheel) moves the strip, and the browser scrolls it
-    // natively. Scrolling up or down over it scrolls the page as normal,
-    // never the strip.
+    // natively. Scrolling up or down over it scrolls the page as normal.
     carousel.addEventListener('wheel', (e) => {
       if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) markInteraction();
     }, { passive: true });
-    carousel.addEventListener('scroll', () => { wrap(); }, { passive: true });
+    // The visitor moved it by hand: adopt their position, then keep the
+    // loop seamless.
+    carousel.addEventListener('scroll', () => {
+      if (Math.abs(carousel.scrollLeft - pos) > 2) {
+        pos = carousel.scrollLeft;
+        const before = pos;
+        wrap();
+        if (pos !== before) carousel.scrollLeft = pos;
+      }
+    }, { passive: true });
 
     if (reduceMotion) return; // manual scrolling above still works; no auto-advance
 
     const tick = (now) => {
       if (lastFrame === null) lastFrame = now;
-      const dt = (now - lastFrame) / 1000;
+      const dt = Math.min((now - lastFrame) / 1000, 0.1);
       lastFrame = now;
-      if (now - lastInteraction > RESUME_DELAY_MS) {
-        carousel.scrollLeft += SPEED_PX_S * dt;
+      if (!hovering && now - lastInteraction > RESUME_DELAY_MS) {
+        pos += SPEED_PX_S * dt;
         wrap();
+        carousel.scrollLeft = pos;
       }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
+  });
+
+  // Photo backdrop (Portfolio, About, Contact): the pinned photograph
+  // darkens as the visitor scrolls through its block, from the light
+  // banner state to dark enough for cream text to read over it.
+  document.querySelectorAll('.backdrop-scope').forEach((scope) => {
+    const MIN = 0.15, MAX = 0.78;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const scrolled = -scope.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, scrolled / (window.innerHeight * 0.85)));
+      scope.style.setProperty('--shade', (MIN + (MAX - MIN) * p).toFixed(3));
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   });
 
   // Home Final CTA, background auto-cycles through a small set of
