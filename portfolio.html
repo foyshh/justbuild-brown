@@ -33,7 +33,7 @@
 </head>
 <body>
 
-<header class="site-nav">
+<header class="site-nav site-nav--hero">
   <div class="wrap">
     <a href="index.html" class="nav-mark">
       <span class="name">Just Build</span>
@@ -64,13 +64,20 @@
 
 <main>
 
-  <!-- Intro, short and understated, the projects do the talking -->
-  <section class="tone-white" style="padding-top:calc(var(--nav-h) + 48px); padding-bottom:16px;">
-    <div class="wrap">
+  <!-- Banner: full-bleed photograph with the page title on it, the
+       same treatment as the home page. -->
+  <section class="page-hero page-hero--short">
+    <img class="page-hero-bg" fetchpriority="high" src="images/projects/sundial/08.jpg" alt=""/>
+    <div class="wrap page-hero-inner reveal">
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span class="crumb-sep">/</span><span class="crumb-current" aria-current="page">Portfolio</span></nav>
-      <span class="eyebrow reveal port-hero-eyebrow" style="display:block; margin-bottom:18px;">Selected Works</span>
-      <h1 class="headline reveal port-hero-title" style="margin:0 0 26px;">Portfolio</h1>
-      <div class="portfolio-filters reveal" role="tablist" aria-label="Filter projects by category">
+      <p class="page-hero-kicker">Selected Works</p>
+      <h1 class="page-hero-title">Portfolio<em>Residences, hospitality and commercial spaces.</em></h1>
+    </div>
+  </section>
+
+  <section class="tone-white" style="padding:56px 0 0;">
+    <div class="wrap">
+      <div class="portfolio-filters reveal" role="tablist" aria-label="Filter projects by category" style="margin-top:0;">
         <button type="button" class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">All Projects</button>
         <button type="button" class="filter-btn" data-filter="residential" role="tab" aria-selected="false">Residential</button>
         <button type="button" class="filter-btn" data-filter="hospitality" role="tab" aria-selected="false">Hospitality</button>

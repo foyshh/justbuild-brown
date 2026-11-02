@@ -1111,9 +1111,17 @@ body:not(.portal-page) header.site-nav.scrolled,
 body:not(.portal-page) header.site-nav.site-nav--hero:not(.scrolled) {
   top: 14px; left: 50%; width: min(1120px, calc(100% - 24px)); height: 64px;
   transform: translateX(-50%);
-  background: rgba(31, 24, 16, 0.86);
-  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  border: 1px solid rgba(240, 223, 192, 0.14); border-radius: 6px;
+  /* Smoked glass: whatever is behind shows through, blurred. Over the
+     page's light content it stays dark enough for the cream text to
+     read clearly (5.5:1 over the palest point); over a banner photo
+     (--hero, before scrolling) it thins out to a lighter glass. */
+  background: linear-gradient(180deg, rgba(42, 32, 21, 0.66), rgba(31, 24, 16, 0.74));
+  backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  border: 1px solid rgba(255, 244, 225, 0.2); border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 244, 225, 0.14), 0 10px 30px -12px rgba(20, 14, 8, 0.45);
+}
+body:not(.portal-page) header.site-nav.site-nav--hero:not(.scrolled) {
+  background: linear-gradient(180deg, rgba(42, 32, 21, 0.34), rgba(31, 24, 16, 0.42));
 }
 body:not(.portal-page) header.site-nav.nav-hidden { transform: translate(-50%, -150%); }
 body:not(.portal-page) header.site-nav .wrap { max-width: none; padding: 0 24px; }
@@ -1186,3 +1194,47 @@ footer::after {
   color: transparent;
   text-shadow: 0 1px 0 rgba(255,255,255,0.55), 0 -1px 0 rgba(42,32,21,0.14);
 }
+
+/* ========================================================
+   Page banner (Portfolio, About, Contact, project pages)
+   The home page's statement treatment carried onto every page: a
+   full-bleed photograph, darkened toward the bottom, with the page
+   title set large in capitals directly on it.
+   ======================================================== */
+.page-hero { position: relative; padding: 0; min-height: 78vh; display: flex; align-items: flex-end; overflow: hidden; background: var(--c-ink); color: #fff; }
+.page-hero--short { min-height: 66vh; }
+.page-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.page-hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(26,20,13,0.82) 0%, rgba(26,20,13,0.4) 45%, rgba(26,20,13,0.15) 75%, rgba(26,20,13,0.35) 100%);
+}
+.page-hero-inner { position: relative; z-index: 2; width: 100%; padding-top: 140px; padding-bottom: 72px; }
+.page-hero .breadcrumbs, .page-hero .breadcrumbs a, .page-hero .breadcrumbs .crumb-current { color: rgba(255,255,255,0.78); }
+.page-hero .breadcrumbs a:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+.page-hero-kicker { font-family: var(--font-accent); font-weight: 500; font-size: 19px; letter-spacing: 0.06em; color: rgba(255,255,255,0.8); margin: 0 0 18px; }
+.page-hero-title {
+  font-family: var(--font-display); font-weight: 400; color: #fff; margin: 0;
+  font-size: clamp(48px, 7.4vw, 108px); line-height: 1; letter-spacing: 0.01em; text-transform: uppercase;
+}
+.page-hero-title em { display: block; text-transform: none; font-style: italic; font-weight: 300; letter-spacing: -0.005em; margin-top: 14px; font-size: 0.4em; line-height: 1.2; }
+.page-hero-title--name { text-transform: none; letter-spacing: -0.01em; font-size: clamp(42px, 6vw, 88px); }
+.page-hero-lede { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.86); max-width: 48ch; margin: 24px 0 0; }
+.page-hero .signature { display: block; margin-top: 22px; }
+@media (max-width: 700px) {
+  .page-hero { min-height: 72vh; }
+  .page-hero--short { min-height: 60vh; }
+  .page-hero-inner { padding-bottom: 48px; }
+  .page-hero-lede { font-size: 16px; }
+}
+
+/* ---------- Espresso band (About: ethos + journey) ----------
+   The home page's dark "how we work" band, reused: any section given
+   .band-dark flips to cream type on espresso. */
+.band-dark { background: #241B12; color: #F2E8D4; }
+.band-dark .eyebrow { color: rgba(242,232,212,0.7); }
+.band-dark .headline, .band-dark .journey-num, .band-dark .journey-title { color: #F2E8D4; }
+.band-dark .body-copy, .band-dark .journey-desc { color: rgba(242,232,212,0.72); }
+.band-dark .journey-icon { color: rgba(242,232,212,0.6); }
+.band-dark .journey-row { border-top-color: rgba(242,232,212,0.16); }
+.page-hero-title--pair em { font-size: 1em; margin-top: 2px; line-height: 1; }
+address { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 14px; line-height: 1.8; color: var(--c-ink-soft); }

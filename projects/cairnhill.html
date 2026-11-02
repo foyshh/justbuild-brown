@@ -33,7 +33,7 @@
 </head>
 <body>
 
-<header class="site-nav">
+<header class="site-nav site-nav--hero">
   <div class="wrap">
     <a href="../index.html" class="nav-mark">
       <span class="name">Just Build</span>
@@ -64,22 +64,23 @@
 
 <main>
 
-  <!-- Header: All Projects / location, year / name / description, its
-       own section in normal flow above the gallery, clearly separated
-       from it by a rule so the two never compete for the same space. -->
-  <section class="tone-white" style="padding-top:calc(var(--nav-h) + 24px); padding-bottom:8px;">
-    <div class="wrap reveal project-header">
+  <!-- Banner: the project's own photograph, full width, with its
+       name, place and year set on it, the same treatment as the home
+       page. -->
+  <section class="page-hero page-hero--short">
+    <img class="page-hero-bg" fetchpriority="high" src="../images/projects/cairnhill/01.jpg" alt=""/>
+    <div class="wrap page-hero-inner reveal">
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="crumb-sep">/</span><a href="../portfolio.html">Portfolio</a><span class="crumb-sep">/</span><span class="crumb-current" aria-current="page">Cairnhill Bungalow</span></nav>
-      <span class="eyebrow" style="display:block; margin-bottom:10px;">Cairnhill, 2023</span>
-      <h1 class="headline split-line" style="margin:0 0 14px;">Cairnhill Bungalow</h1>
-      <p class="body-copy" style="max-width:480px; margin:0;">A black-and-white bungalow's brick and timber shutters, restored rather than replaced.</p>
+      <p class="page-hero-kicker">Cairnhill, 2023</p>
+      <h1 class="page-hero-title page-hero-title--name">Cairnhill Bungalow</h1>
+      <p class="page-hero-lede">A black-and-white bungalow's brick and timber shutters, restored rather than replaced.</p>
     </div>
   </section>
 
   <!-- Gallery: rectangular thumbnails left, one wide, dominant stage
        image right, height-matched so the whole block reads as one
        clean unit with nothing overlapping or floating on top of it. -->
-  <section class="tone-white" style="padding-top:8px; padding-bottom:28px; border-top:1px solid var(--c-line);">
+  <section class="tone-white" style="padding-top:72px; padding-bottom:28px;">
     <div class="wrap reveal">
       <div class="project-gallery">
         <div class="project-thumbs" role="tablist" aria-label="Cairnhill Bungalow, image thumbnails">
