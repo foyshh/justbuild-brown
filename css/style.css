@@ -1295,3 +1295,18 @@ address { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 300
 :is(.band-dark, .backdrop-scope) .press-card-frame { border-color: rgba(242,232,212,0.16); background: rgba(242,232,212,0.05); }
 :is(.band-dark, .backdrop-scope) .press-card-frame span { color: rgba(242,232,212,0.7); opacity: 1; }
 a.press-card-frame { text-decoration: none; color: inherit; }
+
+/* Home statement: sized to the screen's height so the whole block,
+   photo and text, fits on one laptop screen (it was ~1000px tall).
+   Spacing and type scale with the viewport height, within limits. */
+@media (min-width: 701px) {
+  .statement { min-height: 100vh; min-height: 100svh; }
+  .statement-inner { padding-top: clamp(84px, 11vh, 120px); padding-bottom: clamp(40px, 7vh, 96px); }
+  .statement-kicker { margin-bottom: clamp(12px, 2.2vh, 28px); }
+  .statement-title { font-size: clamp(44px, min(7vw, 10.5vh), 112px); margin-bottom: clamp(18px, 3vh, 36px); }
+  .statement-copy { margin-bottom: clamp(20px, 3.6vh, 48px); }
+  .statement-facts { margin-bottom: clamp(20px, 3.6vh, 48px); }
+  .statement-facts dt { font-size: clamp(40px, 6.6vh, 80px); }
+  .statement-sign { margin-bottom: clamp(16px, 3vh, 36px); }
+  .statement .signature { font-size: clamp(38px, 6vh, 58px); }
+}
