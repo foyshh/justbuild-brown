@@ -241,17 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
     carousel.addEventListener('touchstart', markInteraction, { passive: true });
     carousel.addEventListener('touchmove', markInteraction, { passive: true });
     carousel.addEventListener('pointerdown', markInteraction);
-    // Wheel: redirect vertical wheel/trackpad motion into horizontal
-    // scroll too, so "scroll down" over the strip pans it sideways
-    // rather than scrolling the page — whichever axis the visitor's
-    // mouse or trackpad actually sends.
+    // Wheel: only sideways motion (a trackpad swipe left/right, or
+    // shift + mouse wheel) moves the strip, and the browser scrolls it
+    // natively. Scrolling up or down over it scrolls the page as normal,
+    // never the strip.
     carousel.addEventListener('wheel', (e) => {
-      markInteraction();
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      carousel.scrollLeft += delta;
-      wrap();
-      e.preventDefault();
-    }, { passive: false });
+      if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) markInteraction();
+    }, { passive: true });
     carousel.addEventListener('scroll', () => { wrap(); }, { passive: true });
 
     if (reduceMotion) return; // manual scrolling above still works; no auto-advance

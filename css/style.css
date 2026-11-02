@@ -1196,13 +1196,13 @@ footer::after {
 }
 
 /* ========================================================
-   Page banner (Portfolio, About, Contact, project pages)
+   Page banner (Portfolio, About, Contact, project pages), full screen
    The home page's statement treatment carried onto every page: a
    full-bleed photograph, darkened toward the bottom, with the page
    title set large in capitals directly on it.
    ======================================================== */
-.page-hero { position: relative; padding: 0; min-height: 78vh; display: flex; align-items: flex-end; overflow: hidden; background: var(--c-ink); color: #fff; }
-.page-hero--short { min-height: 66vh; }
+.page-hero { position: relative; padding: 0; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; background: var(--c-ink); color: #fff; }
+
 .page-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .page-hero::before {
   content: ''; position: absolute; inset: 0; z-index: 1;
@@ -1221,8 +1221,6 @@ footer::after {
 .page-hero-lede { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.86); max-width: 48ch; margin: 24px 0 0; }
 .page-hero .signature { display: block; margin-top: 22px; }
 @media (max-width: 700px) {
-  .page-hero { min-height: 72vh; }
-  .page-hero--short { min-height: 60vh; }
   .page-hero-inner { padding-bottom: 48px; }
   .page-hero-lede { font-size: 16px; }
 }
@@ -1238,3 +1236,19 @@ footer::after {
 .band-dark .journey-row { border-top-color: rgba(242,232,212,0.16); }
 .page-hero-title--pair em { font-size: 1em; margin-top: 2px; line-height: 1; }
 address { font-style: normal; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 14px; line-height: 1.8; color: var(--c-ink-soft); }
+
+/* Forms and contact details on the espresso band (Contact page). */
+.band-dark .label, .band-dark .field label { color: rgba(242,232,212,0.7); }
+.band-dark address, .band-dark a.plain { color: #F2E8D4; }
+.band-dark a.plain:hover { color: #fff; }
+.band-dark .field input, .band-dark .field select, .band-dark .field textarea {
+  color: #F2E8D4; border-bottom-color: rgba(242,232,212,0.28);
+}
+.band-dark .field input:focus, .band-dark .field select:focus, .band-dark .field textarea:focus { border-bottom-color: #F2E8D4; }
+.band-dark .field select option { color: var(--c-ink); }
+.band-dark .field select {
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F2E8D4' stroke-width='1.6'%3E%3Cpath d='M5 9l7 7 7-7'/%3E%3C/svg%3E") no-repeat right 2px center;
+}
+.band-dark .btn-fill { background: #F2E8D4; color: var(--c-ink); }
+.band-dark .btn-fill:hover { background: #fff; color: var(--c-ink); }
