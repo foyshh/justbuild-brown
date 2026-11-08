@@ -282,6 +282,24 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(tick);
   });
 
+  // Home curtain: as the first block slides up over the pinned
+  // showcase, the showcase sinks back a touch and dims (--cover 0 to 1
+  // over one screen of scrolling).
+  const homeStack = document.querySelector('.home-stack');
+  if (homeStack && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const pinned = homeStack.querySelector('.showcase');
+    let coverTicking = false;
+    const cover = () => {
+      coverTicking = false;
+      const p = Math.min(1, Math.max(0, window.scrollY / window.innerHeight));
+      pinned.style.setProperty('--cover', p.toFixed(3));
+    };
+    window.addEventListener('scroll', () => {
+      if (!coverTicking) { coverTicking = true; requestAnimationFrame(cover); }
+    }, { passive: true });
+    cover();
+  }
+
   // Photo backdrop (Portfolio, About, Contact): the pinned photograph
   // darkens as the visitor scrolls through its block, from the light
   // banner state to dark enough for cream text to read over it.
@@ -384,35 +402,28 @@ document.addEventListener('DOMContentLoaded', () => {
     scheduleAuto(); // the hero starts blending on its own from the moment the page loads
   }
 
-  // Home showcase: one project at a time, its photograph and its name
-  // dissolving together to the next every few seconds. The thin bars
-  // along the bottom track it: the current one fills while it shows.
-  // Hovering (or focusing) a bar shows that project and pauses the
-  // cycle; clicking a bar jumps to it; clicking the photograph or
-  // "View the project" opens it.
+  // Home showcase: one project photograph at a time, dissolving to the
+  // next every few seconds. The name list along the bottom tracks it:
+  // a thin line fills under the current name while it's showing.
+  // Hovering (or focusing) a name shows that project straight away and
+  // pauses the cycle; clicking a name or the photograph opens it.
   const showcase = document.getElementById('showcase');
   if (showcase) {
     const slides = Array.from(showcase.querySelectorAll('.showcase-slide'));
-    const bars = Array.from(showcase.querySelectorAll('.showcase-progress button'));
+    const links = Array.from(showcase.querySelectorAll('.showcase-ticker a'));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const HOLD_MS = 6000; // keep in sync with --showcase-hold in css/style.css
+    const HOLD_MS = 5500; // keep in sync with --showcase-hold in css/style.css
     let current = 0;
     let timer = null;
     let paused = false;
 
     const show = (i) => {
       current = (i + slides.length) % slides.length;
-      slides.forEach((s, n) => {
-        const on = n === current;
-        s.classList.toggle('is-active', on);
-        if (on) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true');
-        const link = s.querySelector('.showcase-open');
-        if (link) link.tabIndex = on ? 0 : -1;
-      });
-      bars.forEach((b, n) => {
-        b.classList.toggle('is-active', n === current);
-        if (n === current) b.setAttribute('aria-current', 'true');
-        else b.removeAttribute('aria-current');
+      slides.forEach((s, n) => s.classList.toggle('is-active', n === current));
+      links.forEach((a, n) => {
+        a.classList.toggle('is-active', n === current);
+        if (n === current) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
       });
     };
     const schedule = () => {
@@ -428,18 +439,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (i !== current) show(i);
     };
 
-    bars.forEach((b, i) => {
-      b.addEventListener('mouseenter', () => pause(i));
-      b.addEventListener('focus', () => pause(i));
-      b.addEventListener('click', () => { paused = false; show(i); schedule(); });
+    links.forEach((a, i) => {
+      a.addEventListener('mouseenter', () => pause(i));
+      a.addEventListener('focus', () => pause(i));
     });
-    const progress = showcase.querySelector('.showcase-progress');
-    progress.addEventListener('mouseleave', () => { paused = false; schedule(); });
-    progress.addEventListener('focusout', (e) => {
-      if (!progress.contains(e.relatedTarget)) { paused = false; schedule(); }
+    const ticker = showcase.querySelector('.showcase-ticker');
+    ticker.addEventListener('mouseleave', () => { paused = false; schedule(); });
+    ticker.addEventListener('focusout', (e) => {
+      if (!ticker.contains(e.relatedTarget)) { paused = false; schedule(); }
     });
-    showcase.querySelector('.showcase-slides').addEventListener('click', (e) => {
-      if (e.target.closest('a')) return; // the link handles itself
+    showcase.querySelector('.showcase-slides').addEventListener('click', () => {
       window.location.href = slides[current].dataset.href;
     });
     if (reduceMotion) showcase.classList.add('is-paused');

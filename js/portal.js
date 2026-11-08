@@ -77,8 +77,10 @@
     const ms = new Date(iso + 'T00:00:00') - new Date(todayISO() + 'T00:00:00');
     return Math.round(ms / 86400000);
   };
+  // Progress is set by stage alone: a project counts as halfway through
+  // whichever stage it is in.
   const overallPercent = (p, stageCount) =>
-    Math.round(((p.currentStage + (p.stageProgress || 0) / 100) / stageCount) * 100);
+    Math.round(((p.currentStage + 0.5) / stageCount) * 100);
   const greeting = () => {
     const h = new Date().getHours();
     return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
@@ -102,10 +104,9 @@
      line, filled up to where the project actually is. Shared by the
      client page and Steve's live preview so both always match. */
   function stageLineHTML(project, stages) {
-    // The track runs from the first dot to the last, so the fill reaches
-    // dot N exactly when stage N starts, then creeps toward the next
-    // dot as that stage progresses.
-    const fill = Math.min(1, (project.currentStage + (project.stageProgress || 0) / 100) / (stages.length - 1));
+    // The track runs from the first dot to the last; the fill sits
+    // halfway between the current stage's dot and the next one.
+    const fill = Math.min(1, (project.currentStage + 0.5) / (stages.length - 1));
     const items = stages.map((s, i) => {
       const state = i < project.currentStage ? 'is-done' : i === project.currentStage ? 'is-current' : 'is-upcoming';
       const status = state === 'is-done' ? 'Complete' : state === 'is-current' ? 'In progress' : 'Upcoming';
@@ -321,33 +322,41 @@
 
         '<div class="studio-preview">' + stageLineHTML(p, stages) + '</div>' +
 
-        /* Progress */
-        '<form class="studio-card" data-form="progress">' +
-          '<h2 class="portal-h2">Progress</h2>' +
-          '<div class="studio-row">' +
-            '<div class="field"><label for="fStage">Current stage</label><select id="fStage" name="currentStage">' +
-              stages.map((s, i) => '<option value="' + i + '"' + (i === p.currentStage ? ' selected' : '') + '>' + esc(s.name) + '</option>').join('') +
-            '</select></div>' +
-            '<div class="field"><label for="fStagePct">How far through this stage <output id="fStagePctOut">' + (p.stageProgress || 0) + '%</output></label>' +
-              '<input id="fStagePct" name="stageProgress" type="range" min="0" max="100" step="5" value="' + (p.stageProgress || 0) + '"/></div>' +
-          '</div>' +
-          '<div class="studio-row">' +
-            '<div class="field"><label for="fVisit">Next site visit</label><input id="fVisit" name="visitDate" type="date" value="' + esc(p.nextVisit ? p.nextVisit.date : '') + '"/></div>' +
-            '<div class="field"><label for="fVisitNote">What the visit is for</label><input id="fVisitNote" name="visitNote" type="text" value="' + esc(p.nextVisit ? p.nextVisit.note : '') + '" placeholder="e.g. Kitchen joinery walk-through"/></div>' +
-          '</div>' +
-          '<button type="submit" class="btn btn-fill">Save progress</button>' +
-        '</form>' +
-
-        /* Post an update */
+        /* Post an update: first, since it's what Steve does most */
         '<form class="studio-card" data-form="update">' +
           '<h2 class="portal-h2">Post an update</h2>' +
           '<div class="field"><label for="fUTitle">Headline</label><input id="fUTitle" name="title" type="text" required placeholder="e.g. Kitchen stone installed"/></div>' +
           '<div class="field"><label for="fUBody">What happened</label><textarea id="fUBody" name="body" rows="3" required placeholder="A few plain sentences for the client."></textarea></div>' +
           '<div class="studio-row">' +
             '<div class="field"><label for="fUDate">Date</label><input id="fUDate" name="date" type="date" value="' + todayISO() + '" required/></div>' +
-            '<div class="field"><label for="fUImg">Photo (optional)</label><input id="fUImg" name="image" type="text" list="jbImages" placeholder="Pick a photo or paste a link"/></div>' +
+            '<div class="field"><span class="studio-label">Photo (optional)</span>' +
+              '<div class="studio-photo">' +
+                '<label class="btn studio-photo-add" for="fUFile">Add photo</label>' +
+                '<input id="fUFile" class="visually-hidden" type="file" accept="image/*"/>' +
+                '<span class="studio-photo-preview" hidden><img alt="Selected photo"/><button type="button" class="studio-delete studio-photo-remove">Remove</button></span>' +
+              '</div>' +
+            '</div>' +
           '</div>' +
           '<button type="submit" class="btn btn-fill">Post update</button>' +
+        '</form>' +
+
+        /* Stage: one tap on the stage the project is in now */
+        '<section class="studio-card">' +
+          '<h2 class="portal-h2">Which stage is the project in?</h2>' +
+          '<p class="studio-hint">Tap the stage. The client sees it straight away.</p>' +
+          '<div class="studio-stages" role="group" aria-label="Current stage">' +
+            stages.map((s, i) => '<button type="button" class="studio-stage' + (i === p.currentStage ? ' is-current' : '') + '" data-stage="' + i + '" aria-pressed="' + (i === p.currentStage) + '"><span>' + (i + 1) + '</span>' + esc(s.name) + '</button>').join('') +
+          '</div>' +
+        '</section>' +
+
+        /* Next site visit */
+        '<form class="studio-card" data-form="visit">' +
+          '<h2 class="portal-h2">Next site visit</h2>' +
+          '<div class="studio-row">' +
+            '<div class="field"><label for="fVisit">Date</label><input id="fVisit" name="visitDate" type="date" value="' + esc(p.nextVisit ? p.nextVisit.date : '') + '"/></div>' +
+            '<div class="field"><label for="fVisitNote">What the visit is for</label><input id="fVisitNote" name="visitNote" type="text" value="' + esc(p.nextVisit ? p.nextVisit.note : '') + '" placeholder="e.g. Kitchen joinery walk-through"/></div>' +
+          '</div>' +
+          '<button type="submit" class="btn btn-fill">Save visit</button>' +
         '</form>' +
 
         /* Existing updates */
@@ -379,28 +388,63 @@
           '<button type="submit" class="btn btn-fill">Save details</button>' +
         '</form>';
 
-      const progressForm = editorEl.querySelector('[data-form="progress"]');
-      const pctInput = progressForm.stageProgress;
-      const pctOut = progressForm.querySelector('#fStagePctOut');
       const preview = editorEl.querySelector('.studio-preview');
-      // Live preview of the stage line while dragging, before saving.
-      const livePreview = () => {
-        pctOut.textContent = pctInput.value + '%';
-        const draft = Object.assign({}, p, { currentStage: +progressForm.currentStage.value, stageProgress: +pctInput.value });
-        preview.innerHTML = stageLineHTML(draft, stages);
-      };
-      pctInput.addEventListener('input', livePreview);
-      progressForm.currentStage.addEventListener('change', livePreview);
-      progressForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        p.currentStage = +progressForm.currentStage.value;
-        p.stageProgress = +pctInput.value;
-        p.nextVisit = { date: progressForm.visitDate.value, note: progressForm.visitNote.value.trim() };
-        persist('Progress saved');
+      editorEl.querySelectorAll('[data-stage]').forEach(btn => btn.addEventListener('click', () => {
+        p.currentStage = +btn.dataset.stage;
+        editorEl.querySelectorAll('[data-stage]').forEach(b2 => {
+          const on = b2 === btn;
+          b2.classList.toggle('is-current', on);
+          b2.setAttribute('aria-pressed', on);
+        });
+        preview.innerHTML = stageLineHTML(p, stages);
+        persist('Stage updated: ' + stages[p.currentStage].name);
         renderList();
+      }));
+
+      const visitForm = editorEl.querySelector('[data-form="visit"]');
+      visitForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        p.nextVisit = { date: visitForm.visitDate.value, note: visitForm.visitNote.value.trim() };
+        persist('Visit saved');
       });
 
+      // Photo: picked from the computer or phone, shrunk to at most
+      // 1600px on its long side before saving so it stays light.
       const updateForm = editorEl.querySelector('[data-form="update"]');
+      const fileInput = updateForm.querySelector('#fUFile');
+      const previewWrap = updateForm.querySelector('.studio-photo-preview');
+      const previewImg = previewWrap.querySelector('img');
+      const addLabel = updateForm.querySelector('.studio-photo-add');
+      let photoData = '';
+      const setPhoto = (dataUrl) => {
+        photoData = dataUrl;
+        previewWrap.hidden = !dataUrl;
+        addLabel.textContent = dataUrl ? 'Change photo' : 'Add photo';
+        if (dataUrl) previewImg.src = dataUrl;
+      };
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const MAX = 1600;
+            const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            setPhoto(canvas.toDataURL('image/jpeg', 0.8));
+          };
+          img.onerror = () => notify('That file isn\u2019t a photo we can use. Try a JPG or PNG.');
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+        fileInput.value = '';
+      });
+      updateForm.querySelector('.studio-photo-remove').addEventListener('click', () => setPhoto(''));
+
       updateForm.addEventListener('submit', (e) => {
         e.preventDefault();
         p.updates = p.updates || [];
@@ -408,9 +452,14 @@
           date: updateForm.date.value,
           title: updateForm.title.value.trim(),
           body: updateForm.body.value.trim(),
-          image: updateForm.image.value.trim()
+          image: photoData
         });
-        persist('Update posted');
+        if (!Store.save(data)) {
+          p.updates.pop();
+          notify('Couldn\u2019t save: the photo is too large for preview mode. Try a smaller one.');
+          return;
+        }
+        notify('Update posted');
         renderEditor();
       });
 
@@ -448,7 +497,7 @@
       const id = 'project-' + Date.now().toString(36);
       data.projects.unshift({
         id, name: 'New project', address: '', cover: '',
-        startDate: todayISO(), handoverDate: '', currentStage: 0, stageProgress: 0,
+        startDate: todayISO(), handoverDate: '', currentStage: 0,
         nextVisit: { date: '', note: '' }, updates: []
       });
       selectedId = id;
