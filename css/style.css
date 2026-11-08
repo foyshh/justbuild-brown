@@ -1021,7 +1021,7 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
    motion is a slow dissolve between photographs and a hairline filling
    under the current name: no zoom, no sliding. */
 .showcase {
-  --showcase-hold: 5.5s; /* keep in sync with HOLD_MS in js/site.js */
+  --showcase-hold: 6s; /* keep in sync with HOLD_MS in js/site.js */
   position: relative; height: 100vh; min-height: 620px; padding: 0;
   overflow: hidden; background: var(--c-ink); color: #fff;
 }
@@ -1031,37 +1031,43 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
 .showcase-slide img { width: 100%; height: 100%; object-fit: cover; }
 .showcase-slides::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(to top, rgba(26,20,13,0.66) 0%, rgba(26,20,13,0.12) 34%, rgba(26,20,13,0) 60%, rgba(26,20,13,0.22) 100%);
+  background: linear-gradient(to top, rgba(26,20,13,0.82) 0%, rgba(26,20,13,0.4) 40%, rgba(26,20,13,0.08) 70%, rgba(26,20,13,0.3) 100%);
 }
-.showcase-ticker {
+/* Each slide carries its own caption (place and year, the project's
+   name set large, one line about it), laid out exactly like a project
+   page's banner, so the caption dissolves with its photograph. */
+.showcase-caption {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-  list-style: none; margin: 0 auto; padding-top: 0; padding-bottom: 40px;
-  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px;
+  padding-bottom: clamp(88px, 13vh, 132px); color: #fff;
 }
-.showcase-ticker a {
-  display: flex; flex-direction: column; gap: 6px; padding-bottom: 16px; position: relative;
-  text-decoration: none; color: rgba(255,255,255,0.55); transition: color 0.4s ease;
+.showcase-caption .page-hero-title--name { font-size: clamp(44px, min(7vw, 11vh), 112px); }
+.showcase-caption .page-hero-lede { margin-top: 18px; }
+.showcase-open { display: inline-block; margin-top: 28px; }
+.showcase-slide:not(.is-active) .showcase-caption { pointer-events: none; }
+
+/* Progress: one thin bar per project, the current one filling while
+   it shows. Hover a bar to show that project, click to jump to it. */
+.showcase-progress {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: flex; gap: 10px; padding-bottom: clamp(36px, 6vh, 56px);
 }
-.showcase-ticker a:hover, .showcase-ticker a:focus-visible, .showcase-ticker a.is-active { color: #fff; }
-.showcase-name { font-family: var(--font-display); font-size: 21px; line-height: 1.2; }
-.showcase-meta { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
-.showcase-meta i { font-style: normal; opacity: 0.6; margin: 0 4px; }
-.showcase-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(255,255,255,0.22); }
-.showcase-bar::after {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #fff;
+.showcase-progress button {
+  flex: 1 1 0; height: 22px; padding: 0; margin: 0; border: 0; background: none; cursor: pointer;
+  display: flex; align-items: center;
 }
-.showcase-ticker a.is-active .showcase-bar::after { animation: showcase-fill var(--showcase-hold) linear forwards; }
-.showcase.is-paused .showcase-ticker a.is-active .showcase-bar::after { animation: none; width: 100%; }
+.showcase-progress button span { position: relative; display: block; width: 100%; height: 2px; background: rgba(255,255,255,0.28); overflow: hidden; transition: background 0.3s ease; }
+.showcase-progress button:hover span { background: rgba(255,255,255,0.5); }
+.showcase-progress button span::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #fff; }
+.showcase-progress button.is-active span::after { animation: showcase-fill var(--showcase-hold) linear forwards; }
+.showcase.is-paused .showcase-progress button.is-active span::after { animation: none; width: 100%; }
 @keyframes showcase-fill { to { width: 100%; } }
-@media (prefers-reduced-motion: reduce) { .showcase-slide { transition: none; } }
-/* Narrow screens: the list becomes a single current name, so it never
-   crowds the photograph. */
-@media (max-width: 900px) {
-  .showcase-ticker { grid-template-columns: 1fr; padding-bottom: 36px; }
-  .showcase-ticker li { display: none; }
-  .showcase-ticker li:has(a.is-active) { display: block; }
-  .showcase-name { font-size: 26px; }
+@media (max-width: 700px) {
+  .showcase-caption { padding-bottom: 92px; }
+  .showcase-caption .page-hero-lede { font-size: 15px; }
+  .showcase-progress { gap: 6px; padding-bottom: 36px; }
 }
+
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* ---------- Home: studio statement ----------
    A full-bleed photograph, darkened, with one large serif line set
@@ -1092,12 +1098,6 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
   .statement-facts { gap: 44px; }
 }
 
-.showcase-meta { white-space: nowrap; }
-@media (min-width: 901px) and (max-width: 1280px) {
-  .showcase-name { font-size: 18px; }
-  .showcase-ticker { gap: 18px; }
-  .showcase-meta { font-size: 10px; letter-spacing: 0.08em; }
-}
 
 /* ========================================================
    Floating navigation (public pages)
@@ -1109,22 +1109,23 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
 body:not(.portal-page) header.site-nav,
 body:not(.portal-page) header.site-nav.scrolled,
 body:not(.portal-page) header.site-nav.site-nav--hero:not(.scrolled) {
-  top: 14px; left: 50%; width: min(1120px, calc(100% - 24px)); height: 64px;
-  transform: translateX(-50%);
+  top: 0; left: 0; width: 100%; height: 76px;
+  transform: none;
   /* Smoked glass: whatever is behind shows through, blurred. Over the
      page's light content it stays dark enough for the cream text to
      read clearly (5.5:1 over the palest point); over a banner photo
      (--hero, before scrolling) it thins out to a lighter glass. */
   background: linear-gradient(180deg, rgba(42, 32, 21, 0.66), rgba(31, 24, 16, 0.74));
   backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  border: 1px solid rgba(255, 244, 225, 0.2); border-radius: 6px;
-  box-shadow: inset 0 1px 0 rgba(255, 244, 225, 0.14), 0 10px 30px -12px rgba(20, 14, 8, 0.45);
+  border: 0; border-bottom: 1px solid rgba(255, 244, 225, 0.16); border-radius: 0;
+  box-shadow: 0 10px 30px -14px rgba(20, 14, 8, 0.4);
 }
 body:not(.portal-page) header.site-nav.site-nav--hero:not(.scrolled) {
   background: linear-gradient(180deg, rgba(42, 32, 21, 0.34), rgba(31, 24, 16, 0.42));
 }
-body:not(.portal-page) header.site-nav.nav-hidden { transform: translate(-50%, -150%); }
-body:not(.portal-page) header.site-nav .wrap { max-width: none; padding: 0 24px; }
+body:not(.portal-page) header.site-nav.nav-hidden { transform: translateY(-100%); }
+body:not(.portal-page) header.site-nav .wrap { max-width: 1440px; padding: 0 28px; }
+@media (min-width: 1024px) { body:not(.portal-page) header.site-nav .wrap { padding: 0 64px; } }
 body:not(.portal-page) header.site-nav .nav-mark,
 body:not(.portal-page) header.site-nav.site-nav--hero:not(.scrolled) .nav-mark { color: #F2E8D4; }
 body:not(.portal-page) header.site-nav .nav-mark .name { font-size: 24px; }
@@ -1163,14 +1164,14 @@ body:not(.portal-page) .project-header h1.headline { text-transform: none; lette
 .statement-sign-role { font-family: 'Inter', sans-serif; font-size: 13px; color: rgba(255,255,255,0.7); }
 
 /* ---------- How we work: a staircase on espresso ---------- */
-.process-band { background: #241B12; color: #F2E8D4; padding: 144px 0 160px; }
-.process-title { color: #F2E8D4; margin: 0 0 88px; }
+.process-band { background: #241B12; color: #F2E8D4; padding: 96px 0 104px; }
+.process-title { color: #F2E8D4; margin: 0 0 48px; }
 .process-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; }
-.process-steps li { display: flex; gap: 18px; padding: 0 28px 28px 0; border-bottom: 1px solid rgba(242,232,212,0.16); }
+.process-steps li { display: flex; gap: 18px; padding: 0 28px 22px 0; border-bottom: 1px solid rgba(242,232,212,0.16); }
 .process-steps li + li { border-left: 1px solid rgba(242,232,212,0.16); padding-left: 24px; }
-.process-steps li:nth-child(2) { margin-top: 96px; }
-.process-steps li:nth-child(3) { margin-top: 192px; }
-.process-steps li:nth-child(4) { margin-top: 288px; }
+.process-steps li:nth-child(2) { margin-top: 36px; }
+.process-steps li:nth-child(3) { margin-top: 72px; }
+.process-steps li:nth-child(4) { margin-top: 108px; }
 .process-num { font-family: var(--font-display); font-size: 20px; color: rgba(242,232,212,0.5); line-height: 1.3; }
 .process-steps h3 { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.2; margin: 0 0 14px; color: #F2E8D4; }
 .process-steps p { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 15px; line-height: 1.75; color: rgba(242,232,212,0.68); margin: 0; max-width: 32ch; }
@@ -1309,4 +1310,12 @@ a.press-card-frame { text-decoration: none; color: inherit; }
   .statement-facts dt { font-size: clamp(40px, 6.6vh, 80px); }
   .statement-sign { margin-bottom: clamp(16px, 3vh, 36px); }
   .statement .signature { font-size: clamp(38px, 6vh, 58px); }
+}
+
+/* Captions never overlap during the photo dissolve: the outgoing name
+   fades away quickly, the incoming one appears once the old has gone. */
+.showcase-caption { opacity: 0; transition: opacity 0.45s ease; }
+.showcase-slide.is-active .showcase-caption { opacity: 1; transition: opacity 0.9s ease 0.55s; }
+@media (prefers-reduced-motion: reduce) {
+  .showcase-caption, .showcase-slide.is-active .showcase-caption { transition: none; }
 }

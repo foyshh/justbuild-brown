@@ -63,28 +63,77 @@
 
 <main>
 
-  <!-- Showcase: the work, full screen, and nothing else. One project
-       at a time, crossfading slowly on its own; the list along the
-       bottom names every project. Hovering a name shows that project,
-       clicking it (or the photograph) opens it. No zoom, no sliding,
-       just the dissolve. -->
+  <!-- Showcase: one project at a time, full screen, with its name set
+       large on the photograph the same way a project page opens. The
+       slides crossfade slowly on their own; the thin bars along the
+       bottom show which project is up and how long until the next
+       (hover one to show that project and pause, click to jump). -->
   <section class="showcase" id="showcase" aria-label="Selected projects">
+    <h1 class="visually-hidden">Just Build, architectural interiors in Singapore</h1>
     <div class="showcase-slides">
-      <div class="showcase-slide is-active" data-href="projects/obsidian.html"><img fetchpriority="high" src="images/projects/obsidian/03.jpg" alt="The Obsidian Residence"/></div>
-      <div class="showcase-slide" data-href="projects/sundial.html"><img loading="lazy" src="images/projects/sundial/03.jpg" alt="The Sundial House"/></div>
-      <div class="showcase-slide" data-href="projects/cairnhill.html"><img loading="lazy" src="images/projects/cairnhill/01.jpg" alt="Cairnhill Bungalow"/></div>
-      <div class="showcase-slide" data-href="projects/lattice.html"><img loading="lazy" src="images/projects/lattice/01.jpg" alt="The Lattice House"/></div>
-      <div class="showcase-slide" data-href="projects/meridian.html"><img loading="lazy" src="images/projects/meridian/03.jpg" alt="The Meridian Office"/></div>
-      <div class="showcase-slide" data-href="projects/cobalt.html"><img loading="lazy" src="images/projects/cobalt/01.jpg" alt="The Cobalt Flat"/></div>
+      <div class="showcase-slide is-active" data-href="projects/obsidian.html">
+        <img fetchpriority="high" src="images/projects/obsidian/03.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Bukit Timah, 2024</p>
+          <h2 class="page-hero-title page-hero-title--name">The Obsidian Residence</h2>
+          <p class="page-hero-lede">Dark timber and brass in quiet conversation, a home built for evenings that linger.</p>
+          <a href="projects/obsidian.html" class="statement-link showcase-open">View the project</a>
+        </div>
+      </div>
+      <div class="showcase-slide" data-href="projects/sundial.html" aria-hidden="true">
+        <img loading="lazy" src="images/projects/sundial/03.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Sentosa Cove, 2024</p>
+          <h2 class="page-hero-title page-hero-title--name">The Sundial House</h2>
+          <p class="page-hero-lede">A curved black stair and a lap pool trace one continuous line through the plan.</p>
+          <a href="projects/sundial.html" class="statement-link showcase-open" tabindex="-1">View the project</a>
+        </div>
+      </div>
+      <div class="showcase-slide" data-href="projects/meridian.html" aria-hidden="true">
+        <img loading="lazy" src="images/projects/meridian/03.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Raffles Place, 2024</p>
+          <h2 class="page-hero-title page-hero-title--name">The Meridian Office</h2>
+          <p class="page-hero-lede">A financial district fit-out where the lounge and the skyline share equal billing.</p>
+          <a href="projects/meridian.html" class="statement-link showcase-open" tabindex="-1">View the project</a>
+        </div>
+      </div>
+      <div class="showcase-slide" data-href="projects/cairnhill.html" aria-hidden="true">
+        <img loading="lazy" src="images/projects/cairnhill/01.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Cairnhill, 2023</p>
+          <h2 class="page-hero-title page-hero-title--name">Cairnhill Bungalow</h2>
+          <p class="page-hero-lede">A black-and-white bungalow’s brick and timber shutters, restored rather than replaced.</p>
+          <a href="projects/cairnhill.html" class="statement-link showcase-open" tabindex="-1">View the project</a>
+        </div>
+      </div>
+      <div class="showcase-slide" data-href="projects/lattice.html" aria-hidden="true">
+        <img loading="lazy" src="images/projects/lattice/01.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Emerald Hill, 2023</p>
+          <h2 class="page-hero-title page-hero-title--name">The Lattice House</h2>
+          <p class="page-hero-lede">Brass fretwork screens filter light across a shophouse rebuilt for a quieter kind of living.</p>
+          <a href="projects/lattice.html" class="statement-link showcase-open" tabindex="-1">View the project</a>
+        </div>
+      </div>
+      <div class="showcase-slide" data-href="projects/cobalt.html" aria-hidden="true">
+        <img loading="lazy" src="images/projects/cobalt/01.jpg" alt=""/>
+        <div class="wrap showcase-caption">
+          <p class="page-hero-kicker">Toa Payoh, 2024</p>
+          <h2 class="page-hero-title page-hero-title--name">The Cobalt Flat</h2>
+          <p class="page-hero-lede">A cobalt archway and a spare white kitchen, colour used sparingly and with intent.</p>
+          <a href="projects/cobalt.html" class="statement-link showcase-open" tabindex="-1">View the project</a>
+        </div>
+      </div>
     </div>
-    <ol class="showcase-ticker wrap">
-      <li><a href="projects/obsidian.html" data-i="0" class="is-active" aria-current="true"><span class="showcase-name">The Obsidian Residence</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-      <li><a href="projects/sundial.html" data-i="1"><span class="showcase-name">The Sundial House</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-      <li><a href="projects/cairnhill.html" data-i="2"><span class="showcase-name">Cairnhill Bungalow</span><span class="showcase-meta">2023 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-      <li><a href="projects/lattice.html" data-i="3"><span class="showcase-name">The Lattice House</span><span class="showcase-meta">2023 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-      <li><a href="projects/meridian.html" data-i="4"><span class="showcase-name">The Meridian Office</span><span class="showcase-meta">2024 <i>|</i> Commercial</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-      <li><a href="projects/cobalt.html" data-i="5"><span class="showcase-name">The Cobalt Flat</span><span class="showcase-meta">2024 <i>|</i> Residential</span><span class="showcase-bar" aria-hidden="true"></span></a></li>
-    </ol>
+    <div class="wrap showcase-progress" role="group" aria-label="Choose a project">
+      <button type="button" data-i="0" class="is-active" aria-current="true" aria-label="Show The Obsidian Residence"><span></span></button>
+      <button type="button" data-i="1" aria-label="Show The Sundial House"><span></span></button>
+      <button type="button" data-i="2" aria-label="Show The Meridian Office"><span></span></button>
+      <button type="button" data-i="3" aria-label="Show Cairnhill Bungalow"><span></span></button>
+      <button type="button" data-i="4" aria-label="Show The Lattice House"><span></span></button>
+      <button type="button" data-i="5" aria-label="Show The Cobalt Flat"><span></span></button>
+    </div>
   </section>
 
   <!-- The studio, in one line, set over a full-bleed photograph. -->
