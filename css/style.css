@@ -1310,8 +1310,8 @@ a.press-card-frame { text-decoration: none; color: inherit; }
 
 /* ========================================================
    Home: curtain + pinned backdrop
-   The showcase stays pinned while the next block slides up over it
-   like a curtain; as it is covered it sinks back slightly and dims
+   The showcase stays pinned, full size, while the next block slides
+   up over it like a curtain; as it is covered it dims
    (--cover, 0 to 1, set in js/site.js). From the studio statement on,
    one photograph stays fixed behind every section up to the closing
    line, darkening as you scroll (the shared .backdrop-scope system).
@@ -1319,11 +1319,10 @@ a.press-card-frame { text-decoration: none; color: inherit; }
 .home-stack { position: relative; }
 .home-stack > .showcase {
   position: sticky; top: 0; z-index: 0;
-  transform: scale(calc(1 - var(--cover, 0) * 0.06)); transform-origin: 50% 35%;
 }
 .home-stack > .showcase::after {
   content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  background: #120C07; opacity: calc(var(--cover, 0) * 0.65);
+  background: #120C07; opacity: calc(var(--cover, 0) * 0.5);
 }
 .home-scope { z-index: 1; box-shadow: 0 -40px 80px -20px rgba(10, 6, 3, 0.55); }
 .home-scope .curated-arrow { color: rgba(242,232,212,0.75); }
@@ -1365,4 +1364,56 @@ a.press-card-frame { text-decoration: none; color: inherit; }
   .foot-links-grid { grid-template-columns: 1fr 1fr !important; gap: 24px 20px !important; }
   .foot-links-grid > div:last-child { grid-column: 1 / -1; }
   .foot-bottom { margin-top: 24px; padding-top: 24px; gap: 12px; }
+}
+
+/* ========================================================
+   Compact footer
+   One band: the studio's name and line, then address, email and
+   quick links side by side, then the legal line with Slate's logo.
+   (Overrides the inline layout styles each page's footer carries.)
+   ======================================================== */
+footer { padding: 52px 0 24px; }
+footer .wrap > div:first-child {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr) !important;
+  gap: 32px 56px !important; padding-bottom: 32px !important; align-items: start;
+}
+footer .foot-mark { font-size: 20px; margin-bottom: 8px !important; }
+footer .wrap > div:first-child .body-copy { font-size: 13px !important; line-height: 1.6; max-width: 300px !important; margin: 0; }
+footer .label { margin-bottom: 8px; }
+.foot-links-grid { gap: 24px 40px !important; }
+footer address, footer a.plain { font-size: 14px; line-height: 1.7; }
+.foot-bottom { margin-top: 0; padding-top: 18px; }
+.foot-credit-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.foot-credit-logo span { letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--c-ink-soft); }
+.foot-credit-logo img { height: 24px; width: auto; opacity: 0.85; transition: opacity 0.3s ease; }
+.foot-credit-logo:hover img { opacity: 1; }
+@media (max-width: 860px) {
+  footer .wrap > div:first-child { grid-template-columns: 1fr !important; gap: 24px !important; }
+}
+
+/* ========================================================
+   Home: steps light up in order
+   When "One studio, start to finish" scrolls into view, a warm
+   gradient line draws across each step in turn (1, then 2, 3, 4) and
+   each step brightens as its line arrives. Plays once.
+   ======================================================== */
+.process-steps li { position: relative; }
+.process-steps li::before {
+  content: ''; position: absolute; left: 0; top: -1px; height: 2px; width: 0;
+  background: linear-gradient(90deg, rgba(201,164,106,0), #C9A46A 35%, #F2E8D4);
+}
+.process-steps.reveal li { opacity: 0.28; transition: opacity 0.9s ease; }
+.process-steps.reveal.in li { opacity: 1; }
+.process-steps.reveal.in li::before { width: 100%; transition: width 1.1s cubic-bezier(0.22,0.61,0.36,1); }
+.process-steps.reveal.in li:nth-child(1), .process-steps.reveal.in li:nth-child(1)::before { transition-delay: 0.2s; }
+.process-steps.reveal.in li:nth-child(2), .process-steps.reveal.in li:nth-child(2)::before { transition-delay: 0.75s; }
+.process-steps.reveal.in li:nth-child(3), .process-steps.reveal.in li:nth-child(3)::before { transition-delay: 1.3s; }
+.process-steps.reveal.in li:nth-child(4), .process-steps.reveal.in li:nth-child(4)::before { transition-delay: 1.85s; }
+.process-steps.reveal.in .process-num { color: #C9A46A; transition: color 0.9s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .process-steps.reveal li { opacity: 1; transition: none; }
+  .process-steps.reveal li::before { width: 100%; transition: none; }
+}
+@media (max-width: 700px) {
+  .foot-links-grid > div:last-child a.plain { display: inline-block !important; margin-right: 18px; }
 }
