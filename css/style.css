@@ -1424,3 +1424,9 @@ footer address, footer a.plain { font-size: 14px; line-height: 1.7; }
 /* Contact form: confirmation / error line under the button */
 .enquiry-status { margin: 16px 0 0; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #F6C7B8; }
 .enquiry-status.is-ok { color: #F2E8D4; }
+
+/* Home statement: no shade of its own (it showed as a patch). The
+   pinned photo behind is darkened evenly instead, from the start
+   (data-shade-min on .home-scope), matching the "One studio" band. */
+.home-scope .statement::before { display: none; }
+.home-scope .backdrop-pin::after { background: none; }

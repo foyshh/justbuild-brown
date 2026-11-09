@@ -304,7 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // darkens as the visitor scrolls through its block, from the light
   // banner state to dark enough for cream text to read over it.
   document.querySelectorAll('.backdrop-scope').forEach((scope) => {
-    const MIN = 0.15, MAX = 0.78;
+    // A scope can start darker (data-shade-min), e.g. the home page, where
+    // text sits on the photo from the very first moment.
+    const MIN = parseFloat(scope.dataset.shadeMin || '0.15'), MAX = 0.78;
     let ticking = false;
     const update = () => {
       ticking = false;
