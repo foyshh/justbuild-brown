@@ -96,11 +96,23 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+  // Fires when the block's top reaches about the middle of the screen
+  // (the bottom 40% of the screen doesn't count), so it animates where
+  // the visitor is looking rather than down at the bottom edge.
+  }, { threshold: 0, rootMargin: '0px 0px -40% 0px' });
   document.querySelectorAll('.reveal').forEach(el => {
     el.classList.add('js-armed');
     observer.observe(el);
   });
+
+  // Safety net: blocks near the very end of a page may never reach the
+  // middle of the screen, so reveal anything left once the visitor hits
+  // the bottom.
+  const revealRest = () => {
+    if (window.innerHeight + window.scrollY < document.documentElement.scrollHeight - 4) return;
+    document.querySelectorAll('.reveal.js-armed:not(.in), .img-block:not(.in), .split-line:not(.in)').forEach(el => el.classList.add('in'));
+  };
+  window.addEventListener('scroll', revealRest, { passive: true });
 
   // Growing divider, starts short and widens to fill its container
   // once scrolled into view. Fires once, like the other reveals.
@@ -123,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imgObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -35% 0px' });
   document.querySelectorAll('.img-block').forEach(el => imgObserver.observe(el));
 
   // Headline stagger, wraps text into per-line spans that rise in

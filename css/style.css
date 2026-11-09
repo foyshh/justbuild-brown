@@ -1436,7 +1436,7 @@ footer address, footer a.plain { font-size: 14px; line-height: 1.7; }
    ======================================================== */
 @media (max-width: 700px) {
   /* Project name sits well up from the bottom edge of the slideshow. */
-  .showcase-ticker { padding-bottom: calc(18vh + env(safe-area-inset-bottom, 0px)); }
+  .showcase-ticker { padding-bottom: calc(11vh + env(safe-area-inset-bottom, 0px)); }
 
   /* "We make simple things look good": fewer elements, smaller type,
      more air between them. */
