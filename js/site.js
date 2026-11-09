@@ -551,18 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Contact form (visual feedback only, no backend)
-  const form = document.getElementById('enquiryForm');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('button[type="submit"]');
-      const original = btn.textContent;
-      btn.textContent = 'Message Sent';
-      btn.style.opacity = '0.7';
-      setTimeout(() => { btn.textContent = original; btn.style.opacity = '1'; form.reset(); }, 2400);
-    });
-  }
+  // Contact form: handled by js/enquiry.js (saves to the studio's database).
 
   // Log In form: handled by js/portal.js (client portal).
 

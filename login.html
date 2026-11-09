@@ -86,16 +86,6 @@
           </div>
           <button type="submit" class="btn btn-fill" style="width:100%; border:none; margin-top:32px;">Sign in</button>
         </form>
-
-        <!-- Demo mode only: remove this block when real accounts go live. -->
-        <div class="login-demo">
-          <p>Preview mode. Try a sample account:</p>
-          <div class="login-demo-chips">
-            <button type="button" data-demo-user="steve" data-demo-password="studio-demo">Steve (studio)</button>
-            <button type="button" data-demo-user="limfamily" data-demo-password="client-demo">Lim family (client)</button>
-            <button type="button" data-demo-user="rachelchen" data-demo-password="client-demo">Rachel Chen (client)</button>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -139,7 +129,8 @@
 </footer>
 
 <script src="js/site.js"></script>
-<script src="js/portal-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
 <script src="js/portal.js"></script>
 </body>
 </html>

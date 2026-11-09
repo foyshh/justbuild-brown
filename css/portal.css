@@ -255,3 +255,50 @@ h1.studio-title { font-size: clamp(32px, 3.6vw, 48px); line-height: 1.12; margin
   .studio-choice { padding: 28px 22px; }
   .studio-editor-head { flex-direction: column; align-items: flex-start; }
 }
+
+/* ========================================================
+   Softer, rounded look for Steve's area and the client page
+   ======================================================== */
+.portal-page .studio-card,
+.portal-page .studio-preview,
+.portal-page .studio-choice { border-radius: 20px; }
+.portal-page .studio-card, .portal-page .studio-preview { box-shadow: 0 10px 30px -18px rgba(42,32,21,0.35); }
+.portal-page .studio-stage { border-radius: 14px; }
+.portal-page .btn, .portal-page .studio-photo-add, .portal-page .studio-card .field label.studio-photo-add { border-radius: 12px; }
+.portal-page .studio-add-more { border-radius: 12px; }
+.portal-page .studio-dates input { border-radius: 10px; }
+.portal-page .portal-preview-bar { border-radius: 14px; }
+.portal-page .studio-photo-preview img { border-radius: 10px; }
+.studio-toast { border-radius: 999px; }
+.studio-choices { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .studio-choices { grid-template-columns: 1fr; } }
+
+/* Projects list as rounded rows */
+.studio-app .studio-list { list-style: none; padding: 0; border-top: 0; display: flex; flex-direction: column; gap: 10px; }
+.studio-app .studio-list li { list-style: none; }
+.studio-app .studio-proj {
+  border: 1px solid var(--c-line); border-left: 1px solid var(--c-line); border-radius: 16px;
+  background: rgba(251,248,244,0.72);
+}
+.studio-app .studio-proj:hover { border-color: var(--c-ink); background: rgba(251,248,244,0.95); }
+
+/* New-client confirmation */
+.studio-creds { display: grid; grid-template-columns: auto 1fr; gap: 10px 24px; margin: 8px 0 20px; font-family: 'Inter', sans-serif; }
+.studio-creds dt { color: var(--c-ink-soft); font-size: 13px; }
+.studio-creds dd { margin: 0; font-size: 18px; font-weight: 500; color: var(--c-ink); letter-spacing: 0.02em; }
+
+/* Enquiries */
+.studio-badge {
+  display: inline-block; vertical-align: middle; margin-left: 8px; padding: 3px 10px; border-radius: 999px;
+  background: var(--c-ink); color: var(--c-ink-invert);
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+}
+.studio-enquiries { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.studio-enquiry { margin-bottom: 0; }
+.studio-enquiry.is-new { border-color: var(--c-ink); }
+.studio-enquiry-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 24px; flex-wrap: wrap; font-family: 'Inter', sans-serif; }
+.studio-enquiry-head strong { font-size: 17px; font-weight: 500; color: var(--c-ink); }
+.studio-enquiry-meta { display: block; margin-top: 4px; font-size: 13px; color: var(--c-ink-soft); }
+.studio-enquiry-msg { font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.7; color: var(--c-ink); white-space: pre-wrap; margin: 16px 0 12px; }
+.studio-enquiry-actions { display: flex; gap: 18px; align-items: center; }
+.studio-link-btn { background: none; border: none; padding: 4px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--c-ink); text-decoration: underline; }

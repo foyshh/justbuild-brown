@@ -1417,3 +1417,7 @@ footer address, footer a.plain { font-size: 14px; line-height: 1.7; }
 @media (max-width: 700px) {
   .foot-links-grid > div:last-child a.plain { display: inline-block !important; margin-right: 18px; }
 }
+
+/* Contact form: confirmation / error line under the button */
+.enquiry-status { margin: 16px 0 0; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #F6C7B8; }
+.enquiry-status.is-ok { color: #F2E8D4; }

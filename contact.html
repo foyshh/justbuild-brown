@@ -107,11 +107,11 @@
         <form id="enquiryForm">
           <div class="field">
             <label for="fname">Full Name</label>
-            <input id="fname" name="fname" type="text" required/>
+            <input id="fname" name="fname" type="text" autocomplete="name" maxlength="200" required/>
           </div>
           <div class="field">
             <label for="femail">Email Address</label>
-            <input id="femail" name="femail" type="email" required/>
+            <input id="femail" name="femail" type="email" autocomplete="email" maxlength="320" required/>
           </div>
           <div class="field">
             <label for="ftype">Project Type</label>
@@ -123,9 +123,10 @@
           </div>
           <div class="field">
             <label for="fmsg">Tell us about your project</label>
-            <textarea id="fmsg" name="fmsg" rows="4"></textarea>
+            <textarea id="fmsg" name="fmsg" rows="4" maxlength="5000"></textarea>
           </div>
           <button type="submit" class="btn btn-fill" style="width:100%; border:none;">Tell Us About Your Space</button>
+          <p class="enquiry-status" id="enquiryStatus" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
     </div>
@@ -188,5 +189,8 @@
 </footer>
 
 <script src="js/site.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/enquiry.js"></script>
 </body>
 </html>
