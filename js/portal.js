@@ -2,9 +2,11 @@
    Client portal (demo mode)
    --------------------------------------------------------
    Three pages share this file:
-     login.html   sign in, then route by role
+     login.html   sign in with a username, then route by role
      portal.html  a client's own project, read-only
-     studio.html  Steve's dashboard: every project, editable
+     studio.html  Steve's area: a home screen with two choices
+                  (create a client, view projects), a create form,
+                  the project list and one page per project
 
    Demo mode keeps everything in the browser: the seed in
    js/portal-data.js is copied into localStorage on first visit, and
@@ -15,7 +17,7 @@
    ======================================================== */
 
 (function () {
-  const STORE_KEY = 'jb-portal-v1';
+  const STORE_KEY = 'jb-portal-v2';
   const SESSION_KEY = 'jb-portal-session';
   const seed = window.JB_PORTAL_SEED;
 
@@ -40,19 +42,19 @@
     }
   };
 
+  const norm = (s) => String(s || '').trim().toLowerCase();
   const Auth = {
-    signIn(email, password) {
-      const data = Store.get();
-      const user = data.users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+    signIn(username, password) {
+      const user = Store.get().users.find(u => u.username === norm(username));
       if (!user || user.password !== password) return null;
-      try { sessionStorage.setItem(SESSION_KEY, user.email); } catch (e) {}
+      try { sessionStorage.setItem(SESSION_KEY, user.username); } catch (e) {}
       return user;
     },
     current() {
-      let email = null;
-      try { email = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
-      if (!email) return null;
-      return Store.get().users.find(u => u.email === email) || null;
+      let name = null;
+      try { name = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
+      if (!name) return null;
+      return Store.get().users.find(u => u.username === name) || null;
     },
     signOut() {
       try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
@@ -86,6 +88,7 @@
     return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
   };
   const firstName = (name) => (name || '').split(/\s|&/)[0];
+  const visitItems = (v) => (v && Array.isArray(v.items) ? v.items.filter(Boolean) : []);
 
   /* Signed-in user's name + Sign out, in the nav's right-hand slot. */
   function mountAccountBar(user) {
@@ -100,9 +103,9 @@
     });
   }
 
-  /* The stage line: the project's six phases drawn as one continuous
-     line, filled up to where the project actually is. Shared by the
-     client page and Steve's live preview so both always match. */
+  /* The stage line: the project's stages drawn as one continuous line,
+     filled up to where the project actually is. Shared by the client
+     page and Steve's project page so both always match. */
   function stageLineHTML(project, stages) {
     // The track runs from the first dot to the last; the fill sits
     // halfway between the current stage's dot and the next one.
@@ -139,26 +142,23 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = form.lemail.value;
-      const password = form.lpassword.value;
-      const user = Auth.signIn(email, password);
+      const user = Auth.signIn(form.lusername.value, form.lpassword.value);
       if (!user) {
-        error.textContent = 'That email and password don’t match an account. Check both and try again.';
+        error.textContent = 'That username and password don’t match an account. Check both and try again.';
         error.hidden = false;
         form.lpassword.value = '';
         form.lpassword.focus();
         return;
       }
       error.hidden = true;
-      const btn = form.querySelector('button[type="submit"]');
-      btn.textContent = 'Signing in…';
+      form.querySelector('button[type="submit"]').textContent = 'Signing in…';
       location.href = Auth.homeFor(user);
     });
 
     // Demo account chips fill the form in one click.
-    document.querySelectorAll('[data-demo-email]').forEach(btn => {
+    document.querySelectorAll('[data-demo-user]').forEach(btn => {
       btn.addEventListener('click', () => {
-        form.lemail.value = btn.dataset.demoEmail;
+        form.lusername.value = btn.dataset.demoUser;
         form.lpassword.value = btn.dataset.demoPassword;
         form.querySelector('button[type="submit"]').focus();
       });
@@ -189,7 +189,9 @@
     const stages = data.stages;
     const pct = overallPercent(project, stages.length);
     const current = stages[project.currentStage];
-    const visitIn = project.nextVisit && daysUntil(project.nextVisit.date);
+    const visit = project.nextVisit || {};
+    const visitIn = daysUntil(visit.date);
+    const items = visitItems(visit);
     const isPreview = user.role === 'studio';
     const clientUser = data.users.find(u => u.projectId === project.id);
     const hello = isPreview
@@ -209,14 +211,14 @@
     ).join('') : '<p class="portal-empty">Updates from site will appear here as work progresses.</p>';
 
     root.innerHTML =
-      (isPreview ? '<div class="portal-preview-bar">This is what ' + esc(clientUser ? clientUser.name : 'the client') + ' sees. <a href="studio.html?project=' + esc(project.id) + '">Back to editing</a></div>' : '') +
+      (isPreview ? '<div class="portal-preview-bar">This is what ' + esc(clientUser ? clientUser.name : 'the client') + ' sees. <a href="studio.html#project/' + esc(project.id) + '">Back to editing</a></div>' : '') +
       '<header class="portal-hero">' +
         '<div class="portal-hero-text">' +
           '<p class="portal-hello">' + hello + '</p>' +
           '<h1 class="headline portal-title">' + esc(project.name) + '</h1>' +
           '<p class="portal-address">' + esc(project.address) + '</p>' +
-          '<p class="portal-pct"><span class="portal-pct-num">' + pct + '%</span> of the way to handover' +
-            (project.handoverDate ? ', expected ' + fmtDate(project.handoverDate, { day: 'numeric', month: 'long' }) : '') + '</p>' +
+          '<p class="portal-dates">' + fmtDate(project.startDate, { day: 'numeric', month: 'short', year: 'numeric' }) + ' to ' + fmtDate(project.endDate, { day: 'numeric', month: 'short', year: 'numeric' }) + '</p>' +
+          '<p class="portal-pct"><span class="portal-pct-num">' + pct + '%</span> of the way to completion</p>' +
         '</div>' +
         (project.cover ? '<figure class="portal-cover img-block in"><img src="' + esc(project.cover) + '" alt=""/></figure>' : '') +
       '</header>' +
@@ -232,25 +234,25 @@
           updatesHTML +
         '</section>' +
         '<aside class="portal-side">' +
-          (project.nextVisit && project.nextVisit.date ?
+          (visit.date ?
             '<div class="side-block side-visit">' +
               '<h2 class="portal-h2">Next site visit</h2>' +
-              '<p class="side-big">' + fmtDate(project.nextVisit.date, { weekday: 'long', day: 'numeric', month: 'long' }) + '</p>' +
+              '<p class="side-big">' + fmtDate(visit.date, { weekday: 'long', day: 'numeric', month: 'long' }) + '</p>' +
               (visitIn != null && visitIn >= 0 ? '<p class="side-sub">' + (visitIn === 0 ? 'Today' : visitIn === 1 ? 'Tomorrow' : 'In ' + visitIn + ' days') + '</p>' : '') +
-              (project.nextVisit.note ? '<p class="side-note">' + esc(project.nextVisit.note) + '</p>' : '') +
+              (items.length ? '<ul class="side-list">' + items.map(t => '<li>' + esc(t) + '</li>').join('') + '</ul>' : '') +
             '</div>' : '') +
           '<div class="side-block">' +
             '<h2 class="portal-h2">Key dates</h2>' +
             '<dl class="side-dates">' +
-              '<dt>Work started</dt><dd>' + fmtDate(project.startDate) + '</dd>' +
-              '<dt>Expected handover</dt><dd>' + fmtDate(project.handoverDate) + '</dd>' +
+              '<dt>Start date</dt><dd>' + fmtDate(project.startDate) + '</dd>' +
+              '<dt>End date</dt><dd>' + fmtDate(project.endDate) + '</dd>' +
             '</dl>' +
           '</div>' +
           '<div class="side-block">' +
             '<h2 class="portal-h2">Questions?</h2>' +
             '<p class="side-note">Steve looks after your project personally.</p>' +
             '<a class="plain side-link" href="https://wa.me/6596950765" target="_blank" rel="noopener">WhatsApp Steve</a>' +
-            '<a class="plain side-link" href="mailto:steve@justbuildla.sg">steve@justbuildla.sg</a>' +
+            '<a class="plain side-link" href="mailto:steve@justbuild.com.sg">steve@justbuild.com.sg</a>' +
           '</div>' +
         '</aside>' +
       '</div>';
@@ -259,6 +261,11 @@
 
   /* ========================================================
      studio.html (Steve only)
+     Views, chosen by the address bar's #:
+       (none)            home: Create a client / View projects
+       #new              create a client and their project
+       #projects         every project
+       #project/<id>     one project: post updates, stage, visit
      ======================================================== */
   function initStudio() {
     const root = document.getElementById('studioDashboard');
@@ -270,10 +277,6 @@
 
     let data = Store.get();
     const stages = data.stages;
-    let selectedId = new URLSearchParams(location.search).get('project') || (data.projects[0] && data.projects[0].id);
-
-    const listEl = root.querySelector('[data-project-list]');
-    const editorEl = root.querySelector('[data-editor]');
     const toast = document.getElementById('studioToast');
     let toastTimer;
     const notify = (msg) => {
@@ -283,40 +286,106 @@
       toastTimer = setTimeout(() => toast.classList.remove('is-shown'), 2600);
     };
     const persist = (msg) => {
-      if (Store.save(data)) notify(msg);
-      else notify('Couldn’t save: this browser is blocking storage.');
+      if (Store.save(data)) { notify(msg); return true; }
+      notify('Couldn’t save: this browser is blocking storage.');
+      return false;
     };
-
     const clientOf = (pid) => data.users.find(u => u.role === 'client' && u.projectId === pid);
+    const go = (hash) => { location.hash = hash; };
+    const back = (href, label) => '<a class="studio-back" href="' + href + '">‹ ' + label + '</a>';
+    const demoNote = '<p class="studio-demo-note">Preview mode: changes are saved in this browser only. <button type="button" class="studio-reset" data-reset>Reset sample data</button></p>';
 
-    function renderList() {
-      listEl.innerHTML = data.projects.map(p => {
-        const c = clientOf(p.id);
-        return '<li><button type="button" class="studio-proj' + (p.id === selectedId ? ' is-selected' : '') + '" data-id="' + esc(p.id) + '">' +
-          '<span class="studio-proj-name">' + esc(p.name) + '</span>' +
-          '<span class="studio-proj-meta">' + esc(c ? c.name : 'No client account') + '</span>' +
-          '<span class="studio-proj-stage">' + esc(stages[p.currentStage].name) + ' · ' + overallPercent(p, stages.length) + '%</span>' +
-        '</button></li>';
-      }).join('');
-      listEl.querySelectorAll('.studio-proj').forEach(b => b.addEventListener('click', () => {
-        selectedId = b.dataset.id;
-        history.replaceState(null, '', '?project=' + encodeURIComponent(selectedId));
-        renderList(); renderEditor();
-      }));
+    /* ---------- Home ---------- */
+    function viewHome() {
+      root.innerHTML =
+        '<p class="portal-hello">' + greeting() + ', ' + esc(firstName(user.name)) + '</p>' +
+        '<h1 class="headline studio-title">What would you like to do?</h1>' +
+        '<div class="studio-choices">' +
+          '<a class="studio-choice" href="#new"><span class="studio-choice-title">Create a client</span><span class="studio-choice-sub">Give a new client a username and password, and set up their project.</span></a>' +
+          '<a class="studio-choice" href="#projects"><span class="studio-choice-title">View projects</span><span class="studio-choice-sub">' + data.projects.length + ' project' + (data.projects.length === 1 ? '' : 's') + '. Post updates, photos and site visits.</span></a>' +
+        '</div>' + demoNote;
     }
 
-    function renderEditor() {
-      const p = data.projects.find(x => x.id === selectedId);
-      if (!p) {
-        editorEl.innerHTML = '<p class="portal-empty">Add your first project to start sending updates to a client.</p>';
-        return;
-      }
-      const c = clientOf(p.id) || { name: '', email: '', password: '' };
-      const updates = (p.updates || []).map((u, i) => ({ u, i })).sort((a, b) => b.u.date.localeCompare(a.u.date));
+    /* ---------- Create a client ---------- */
+    function viewNew() {
+      const suggest = () => Math.random().toString(36).slice(2, 6) + '-' + Math.random().toString(36).slice(2, 6);
+      root.innerHTML = back('#', 'Home') +
+        '<h1 class="headline studio-title">Create a client</h1>' +
+        '<form class="studio-card" data-form="new">' +
+          '<h2 class="portal-h2">The client</h2>' +
+          '<div class="studio-row">' +
+            '<div class="field"><label for="nName">Client name</label><input id="nName" name="name" type="text" required placeholder="e.g. Daniel & Mei Lim"/></div>' +
+            '<div class="field"><label for="nUser">Username</label><input id="nUser" name="username" type="text" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="e.g. limfamily"/></div>' +
+          '</div>' +
+          '<div class="studio-row">' +
+            '<div class="field"><label for="nPass">Password</label><input id="nPass" name="password" type="text" required autocomplete="off" value="' + suggest() + '"/></div>' +
+            '<div class="field studio-field-note"><p class="studio-hint">Give the client this username and password. They use them on the Log In page.</p></div>' +
+          '</div>' +
+          '<h2 class="portal-h2">Their project</h2>' +
+          '<div class="studio-row">' +
+            '<div class="field"><label for="nProj">Project name</label><input id="nProj" name="project" type="text" required placeholder="e.g. Holland Grove Residence"/></div>' +
+            '<div class="field"><label for="nAddr">Address</label><input id="nAddr" name="address" type="text" placeholder="e.g. Holland Grove Road"/></div>' +
+          '</div>' +
+          '<div class="studio-row">' +
+            '<div class="field"><label for="nStart">Start date</label><input id="nStart" name="start" type="date" value="' + todayISO() + '"/></div>' +
+            '<div class="field"><label for="nEnd">End date</label><input id="nEnd" name="end" type="date"/></div>' +
+          '</div>' +
+          '<button type="submit" class="btn btn-fill">Create client</button>' +
+        '</form>';
+      const f = root.querySelector('[data-form="new"]');
+      f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = norm(f.username.value).replace(/\s+/g, '');
+        if (data.users.some(u => u.username === username)) {
+          notify('That username is taken. Try another.');
+          f.username.focus();
+          return;
+        }
+        const id = 'p-' + Date.now().toString(36);
+        data.projects.unshift({
+          id, name: f.project.value.trim(), address: f.address.value.trim(), cover: '',
+          startDate: f.start.value, endDate: f.end.value, currentStage: 0,
+          nextVisit: { date: '', items: [] }, updates: []
+        });
+        data.users.push({ username, password: f.password.value, name: f.name.value.trim(), role: 'client', projectId: id });
+        if (persist('Client created. Username: ' + username)) go('project/' + id);
+      });
+    }
 
-      editorEl.innerHTML =
+    /* ---------- All projects ---------- */
+    function viewProjects() {
+      root.innerHTML = back('#', 'Home') +
+        '<div class="studio-head-row"><h1 class="headline studio-title">Projects</h1><a class="btn" href="#new">Create a client</a></div>' +
+        (data.projects.length ? '<ul class="studio-list">' + data.projects.map(p => {
+          const c = clientOf(p.id);
+          return '<li><a class="studio-proj" href="#project/' + esc(p.id) + '">' +
+            '<span class="studio-proj-name">' + esc(p.name) + '</span>' +
+            '<span class="studio-proj-meta">' + esc(c ? c.name + ' (' + c.username + ')' : 'No client account') + '</span>' +
+            '<span class="studio-proj-meta">' + esc(stages[p.currentStage].name) + ' · ' + fmtDate(p.startDate, { day: 'numeric', month: 'short' }) + ' to ' + fmtDate(p.endDate, { day: 'numeric', month: 'short', year: 'numeric' }) + '</span>' +
+          '</a></li>';
+        }).join('') + '</ul>' : '<p class="portal-empty">No projects yet. Create a client to start one.</p>') + demoNote;
+    }
+
+    /* ---------- One project ---------- */
+    function viewProject(id) {
+      const p = data.projects.find(x => x.id === id);
+      if (!p) { go('projects'); return; }
+      const c = clientOf(p.id) || { name: '', username: '', password: '' };
+      const v = p.nextVisit || { date: '', items: [] };
+      const items = visitItems(v);
+      while (items.length < 3) items.push('');
+      const updates = (p.updates || []).map((u, i) => ({ u, i })).sort((a, b) => b.u.date.localeCompare(a.u.date));
+      const visitInput = (val, n) => '<input type="text" name="item" value="' + esc(val) + '" placeholder="' + (n === 0 ? 'e.g. Kitchen joinery walk-through' : 'Another point') + '" aria-label="Visit point ' + (n + 1) + '"/>';
+
+      root.innerHTML = back('#projects', 'All projects') +
         '<div class="studio-editor-head">' +
-          '<h1 class="headline studio-title">' + esc(p.name) + '</h1>' +
+          '<div>' +
+            '<h1 class="headline studio-title">' + esc(p.name) + '</h1>' +
+            '<div class="studio-dates">' +
+              '<label>Start date <input type="date" data-date="startDate" value="' + esc(p.startDate) + '"/></label>' +
+              '<label>End date <input type="date" data-date="endDate" value="' + esc(p.endDate) + '"/></label>' +
+            '</div>' +
+          '</div>' +
           '<a class="text-link" href="portal.html?project=' + esc(p.id) + '">View as client</a>' +
         '</div>' +
 
@@ -349,12 +418,13 @@
           '</div>' +
         '</section>' +
 
-        /* Next site visit */
+        /* Next site visit: a date and as many points as needed */
         '<form class="studio-card" data-form="visit">' +
           '<h2 class="portal-h2">Next site visit</h2>' +
-          '<div class="studio-row">' +
-            '<div class="field"><label for="fVisit">Date</label><input id="fVisit" name="visitDate" type="date" value="' + esc(p.nextVisit ? p.nextVisit.date : '') + '"/></div>' +
-            '<div class="field"><label for="fVisitNote">What the visit is for</label><input id="fVisitNote" name="visitNote" type="text" value="' + esc(p.nextVisit ? p.nextVisit.note : '') + '" placeholder="e.g. Kitchen joinery walk-through"/></div>' +
+          '<div class="field studio-visit-date"><label for="fVisit">Date</label><input id="fVisit" name="visitDate" type="date" value="' + esc(v.date) + '"/></div>' +
+          '<div class="field"><span class="studio-label">What the visit is for (the client sees these as a list)</span>' +
+            '<div class="studio-visit-items">' + items.map(visitInput).join('') + '</div>' +
+            '<button type="button" class="studio-add-more">+ Add more</button>' +
           '</div>' +
           '<button type="submit" class="btn btn-fill">Save visit</button>' +
         '</form>' +
@@ -370,47 +440,54 @@
 
         /* Project details + client login */
         '<form class="studio-card" data-form="details">' +
-          '<h2 class="portal-h2">Project details</h2>' +
+          '<h2 class="portal-h2">Project and client login</h2>' +
           '<div class="studio-row">' +
             '<div class="field"><label for="fName">Project name</label><input id="fName" name="name" type="text" required value="' + esc(p.name) + '"/></div>' +
             '<div class="field"><label for="fAddr">Address</label><input id="fAddr" name="address" type="text" value="' + esc(p.address) + '"/></div>' +
           '</div>' +
-          '<div class="studio-row">' +
-            '<div class="field"><label for="fStart">Work started</label><input id="fStart" name="startDate" type="date" value="' + esc(p.startDate) + '"/></div>' +
-            '<div class="field"><label for="fHand">Expected handover</label><input id="fHand" name="handoverDate" type="date" value="' + esc(p.handoverDate) + '"/></div>' +
-          '</div>' +
-          '<h3 class="studio-h3">Client login</h3>' +
           '<div class="studio-row studio-row-3">' +
             '<div class="field"><label for="fCName">Client name</label><input id="fCName" name="clientName" type="text" value="' + esc(c.name) + '"/></div>' +
-            '<div class="field"><label for="fCEmail">Client email</label><input id="fCEmail" name="clientEmail" type="email" value="' + esc(c.email) + '"/></div>' +
-            '<div class="field"><label for="fCPass">Client password</label><input id="fCPass" name="clientPassword" type="text" autocomplete="off" value="' + esc(c.password) + '"/></div>' +
+            '<div class="field"><label for="fCUser">Username</label><input id="fCUser" name="clientUser" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" value="' + esc(c.username) + '"/></div>' +
+            '<div class="field"><label for="fCPass">Password</label><input id="fCPass" name="clientPassword" type="text" autocomplete="off" value="' + esc(c.password) + '"/></div>' +
           '</div>' +
           '<button type="submit" class="btn btn-fill">Save details</button>' +
         '</form>';
 
-      const preview = editorEl.querySelector('.studio-preview');
-      editorEl.querySelectorAll('[data-stage]').forEach(btn => btn.addEventListener('click', () => {
+      // Start and end dates save as soon as they're changed.
+      root.querySelectorAll('[data-date]').forEach(inp => inp.addEventListener('change', () => {
+        p[inp.dataset.date] = inp.value;
+        persist(inp.dataset.date === 'startDate' ? 'Start date saved' : 'End date saved');
+      }));
+
+      const preview = root.querySelector('.studio-preview');
+      root.querySelectorAll('[data-stage]').forEach(btn => btn.addEventListener('click', () => {
         p.currentStage = +btn.dataset.stage;
-        editorEl.querySelectorAll('[data-stage]').forEach(b2 => {
+        root.querySelectorAll('[data-stage]').forEach(b2 => {
           const on = b2 === btn;
           b2.classList.toggle('is-current', on);
           b2.setAttribute('aria-pressed', on);
         });
         preview.innerHTML = stageLineHTML(p, stages);
         persist('Stage updated: ' + stages[p.currentStage].name);
-        renderList();
       }));
 
-      const visitForm = editorEl.querySelector('[data-form="visit"]');
+      const visitForm = root.querySelector('[data-form="visit"]');
+      const itemsWrap = visitForm.querySelector('.studio-visit-items');
+      visitForm.querySelector('.studio-add-more').addEventListener('click', () => {
+        const n = itemsWrap.querySelectorAll('input').length;
+        itemsWrap.insertAdjacentHTML('beforeend', visitInput('', n));
+        itemsWrap.lastElementChild.focus();
+      });
       visitForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        p.nextVisit = { date: visitForm.visitDate.value, note: visitForm.visitNote.value.trim() };
+        const list = Array.from(itemsWrap.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+        p.nextVisit = { date: visitForm.visitDate.value, items: list };
         persist('Visit saved');
       });
 
       // Photo: picked from the computer or phone, shrunk to at most
       // 1600px on its long side before saving so it stays light.
-      const updateForm = editorEl.querySelector('[data-form="update"]');
+      const updateForm = root.querySelector('[data-form="update"]');
       const fileInput = updateForm.querySelector('#fUFile');
       const previewWrap = updateForm.querySelector('.studio-photo-preview');
       const previewImg = previewWrap.querySelector('img');
@@ -437,14 +514,13 @@
             canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
             setPhoto(canvas.toDataURL('image/jpeg', 0.8));
           };
-          img.onerror = () => notify('That file isn\u2019t a photo we can use. Try a JPG or PNG.');
+          img.onerror = () => notify('That file isn’t a photo we can use. Try a JPG or PNG.');
           img.src = reader.result;
         };
         reader.readAsDataURL(file);
         fileInput.value = '';
       });
       updateForm.querySelector('.studio-photo-remove').addEventListener('click', () => setPhoto(''));
-
       updateForm.addEventListener('submit', (e) => {
         e.preventDefault();
         p.updates = p.updates || [];
@@ -456,67 +532,60 @@
         });
         if (!Store.save(data)) {
           p.updates.pop();
-          notify('Couldn\u2019t save: the photo is too large for preview mode. Try a smaller one.');
+          notify('Couldn’t save: the photo is too large for preview mode. Try a smaller one.');
           return;
         }
         notify('Update posted');
-        renderEditor();
+        viewProject(id);
       });
 
-      editorEl.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+      root.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
         const u = p.updates[+b.dataset.del];
         if (!confirm('Delete “' + u.title + '”? The client will no longer see it.')) return;
         p.updates.splice(+b.dataset.del, 1);
         persist('Update deleted');
-        renderEditor();
+        viewProject(id);
       }));
 
-      const detailsForm = editorEl.querySelector('[data-form="details"]');
+      const detailsForm = root.querySelector('[data-form="details"]');
       detailsForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = detailsForm.clientEmail.value.trim();
-        const clash = email && data.users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.projectId !== p.id);
-        if (clash) { notify('That email is already used by another account.'); detailsForm.clientEmail.focus(); return; }
+        const username = norm(detailsForm.clientUser.value).replace(/\s+/g, '');
+        const clash = username && data.users.find(u => u.username === username && u.projectId !== p.id);
+        if (clash) { notify('That username is taken. Try another.'); detailsForm.clientUser.focus(); return; }
         p.name = detailsForm.name.value.trim();
         p.address = detailsForm.address.value.trim();
-        p.startDate = detailsForm.startDate.value;
-        p.handoverDate = detailsForm.handoverDate.value;
         let client = clientOf(p.id);
-        if (email) {
+        if (username) {
           if (!client) { client = { role: 'client', projectId: p.id }; data.users.push(client); }
           client.name = detailsForm.clientName.value.trim() || 'Client';
-          client.email = email;
+          client.username = username;
           client.password = detailsForm.clientPassword.value;
         }
         persist('Details saved');
-        renderList(); renderEditor();
+        viewProject(id);
       });
     }
 
-    root.querySelector('[data-new-project]').addEventListener('click', () => {
-      const id = 'project-' + Date.now().toString(36);
-      data.projects.unshift({
-        id, name: 'New project', address: '', cover: '',
-        startDate: todayISO(), handoverDate: '', currentStage: 0,
-        nextVisit: { date: '', note: '' }, updates: []
+    /* ---------- Router ---------- */
+    function route() {
+      const h = location.hash.replace(/^#/, '');
+      if (h === 'new') viewNew();
+      else if (h === 'projects') viewProjects();
+      else if (h.indexOf('project/') === 0) viewProject(decodeURIComponent(h.slice(8)));
+      else viewHome();
+      window.scrollTo(0, 0);
+      const r = root.querySelector('[data-reset]');
+      if (r) r.addEventListener('click', () => {
+        if (!confirm('Reset all demo projects and accounts back to the original sample data?')) return;
+        Store.reset();
+        data = Store.get();
+        notify('Demo data reset');
+        route();
       });
-      selectedId = id;
-      persist('Project added');
-      renderList(); renderEditor();
-      editorEl.querySelector('#fName').focus();
-    });
-
-    root.querySelector('[data-reset]').addEventListener('click', () => {
-      if (!confirm('Reset all demo projects and accounts back to the original sample data?')) return;
-      Store.reset();
-      data = Store.get();
-      selectedId = data.projects[0].id;
-      renderList(); renderEditor();
-      notify('Demo data reset');
-    });
-
-    renderList();
-    renderEditor();
+    }
+    window.addEventListener('hashchange', route);
+    route();
   }
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -72,8 +72,8 @@
 
         <form id="loginForm" novalidate>
           <div class="field">
-            <label for="lemail">Email address</label>
-            <input id="lemail" name="lemail" type="email" autocomplete="email" placeholder="you@email.com" required/>
+            <label for="lusername">Username</label>
+            <input id="lusername" name="lusername" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="The username Steve gave you" required/>
           </div>
           <div class="field" style="margin-bottom:12px;">
             <label for="lpassword">Password</label>
@@ -82,7 +82,7 @@
           <p class="login-error" id="loginError" role="alert" hidden></p>
           <div class="login-meta-row">
             <span></span>
-            <a href="https://wa.me/6596950765" target="_blank" rel="noopener">Forgot password? Message Steve</a>
+            <a href="https://wa.me/6596950765" target="_blank" rel="noopener">Forgot your password? Message Steve</a>
           </div>
           <button type="submit" class="btn btn-fill" style="width:100%; border:none; margin-top:32px;">Sign in</button>
         </form>
@@ -91,9 +91,9 @@
         <div class="login-demo">
           <p>Preview mode. Try a sample account:</p>
           <div class="login-demo-chips">
-            <button type="button" data-demo-email="steve@justbuildla.sg" data-demo-password="studio-demo">Steve (studio)</button>
-            <button type="button" data-demo-email="lim.family@demo.sg" data-demo-password="client-demo">Lim family (client)</button>
-            <button type="button" data-demo-email="rachel.chen@demo.sg" data-demo-password="client-demo">Rachel Chen (client)</button>
+            <button type="button" data-demo-user="steve" data-demo-password="studio-demo">Steve (studio)</button>
+            <button type="button" data-demo-user="limfamily" data-demo-password="client-demo">Lim family (client)</button>
+            <button type="button" data-demo-user="rachelchen" data-demo-password="client-demo">Rachel Chen (client)</button>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@
         </div>
         <div>
           <span class="label">Enquiries</span>
-          <a class="plain" href="mailto:steve@justbuildla.sg">steve@justbuildla.sg</a>
+          <a class="plain" href="mailto:steve@justbuild.com.sg">steve@justbuild.com.sg</a>
         </div>
         <div>
           <span class="label">Quick Links</span>

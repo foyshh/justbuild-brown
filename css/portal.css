@@ -205,3 +205,53 @@ h1.studio-title { font-size: clamp(32px, 3.6vw, 48px); line-height: 1.12; margin
   font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-ink);
 }
 .studio-card .field label.studio-photo-add:hover { background: var(--c-ink); color: var(--c-ink-invert); }
+
+/* ========================================================
+   Steve's area: home choices, create form, project list, project page
+   One column, large tap targets, works the same on a phone.
+   ======================================================== */
+.studio-app { max-width: 980px; }
+.studio-app .studio-title { margin-bottom: 28px; }
+.studio-back { display: inline-block; margin-bottom: 20px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--c-ink-soft); text-decoration: none; }
+.studio-back:hover { color: var(--c-ink); }
+.studio-head-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.studio-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0 40px; }
+@media (max-width: 700px) { .studio-choices { grid-template-columns: 1fr; } }
+.studio-choice {
+  display: flex; flex-direction: column; gap: 10px; padding: 36px 32px; text-decoration: none; color: var(--c-ink);
+  background: rgba(251,248,244,0.78); border: 1px solid var(--c-line); transition: border-color 0.2s ease, background 0.2s ease;
+}
+.studio-choice:hover { border-color: var(--c-ink); background: rgba(251,248,244,0.95); }
+.studio-choice-title { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; }
+.studio-choice-sub { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: var(--c-ink-soft); }
+.studio-app .studio-list { margin-top: 12px; }
+.studio-app .studio-proj { text-decoration: none; padding: 20px 16px; }
+.studio-field-note { display: flex; align-items: flex-end; }
+.studio-field-note .studio-hint { margin: 0 0 28px; }
+
+/* Start / end dates under the project name */
+.studio-dates { display: flex; gap: 12px 28px; flex-wrap: wrap; margin-top: -12px; }
+.studio-dates label { display: flex; flex-direction: column; gap: 6px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--c-ink-soft); }
+.studio-dates input { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--c-ink); padding: 8px 10px; border: 1px solid var(--c-line); background: rgba(251,248,244,0.8); }
+
+/* Eight stages: four across, two across on phones */
+.studio-stages { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 700px) { .studio-stages { grid-template-columns: 1fr 1fr; } }
+
+/* Visit points */
+.studio-visit-date { max-width: 320px; }
+.studio-visit-items { display: flex; flex-direction: column; gap: 6px; }
+.studio-add-more {
+  margin-top: 14px; padding: 10px 16px; cursor: pointer; background: none; border: 1px dashed var(--c-ink-soft);
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--c-ink);
+}
+.studio-add-more:hover { border-style: solid; }
+
+/* Client page */
+.portal-dates { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--c-ink-soft); margin: 6px 0 0; }
+.side-list { margin: 14px 0 0; padding-left: 18px; font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.7; color: var(--c-ink-soft); }
+.side-list li { margin-bottom: 4px; }
+@media (max-width: 560px) {
+  .studio-choice { padding: 28px 22px; }
+  .studio-editor-head { flex-direction: column; align-items: flex-start; }
+}

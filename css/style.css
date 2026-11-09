@@ -1177,18 +1177,9 @@ body:not(.portal-page) .project-header h1.headline { text-transform: none; lette
   .process-steps li:first-child { border-top: 1px solid rgba(242,232,212,0.16); }
 }
 
-/* ---------- Footer: engraved wordmark ----------
-   The studio's name set very large across the foot of every page,
-   pressed into the background rather than printed on it. Decorative
-   only (the name is already in the footer as text). */
-footer { overflow: hidden; }
-footer::after {
-  content: 'Just Build'; display: block; text-align: center; pointer-events: none;
-  font-family: var(--font-accent); font-weight: 500; font-size: clamp(64px, 17vw, 260px);
-  line-height: 1.1; letter-spacing: 0.02em; margin-top: 48px; padding-bottom: 0.08em;
-  color: transparent;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.55), 0 -1px 0 rgba(42,32,21,0.14);
-}
+/* (The large engraved "Just Build" wordmark that used to sit at the
+   foot of every page has been removed: the footer now ends at the
+   privacy / terms / credit line.) */
 
 /* ========================================================
    Page banner (Portfolio, About, Contact, project pages), full screen
@@ -1340,4 +1331,38 @@ a.press-card-frame { text-decoration: none; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .home-stack > .showcase { position: relative; transform: none; }
   .home-stack > .showcase::after { display: none; }
+}
+
+/* ========================================================
+   Phones: a shorter home page and footer
+   Same content, tighter spacing and smaller type, so the home page
+   reads in fewer screens.
+   ======================================================== */
+@media (max-width: 700px) {
+  .statement-inner { padding-top: 72px; padding-bottom: 56px; }
+  .statement-kicker { font-size: 16px; margin-bottom: 14px; }
+  .statement-title { font-size: 44px; margin-bottom: 18px; }
+  .statement-copy { font-size: 15px; line-height: 1.65; margin-bottom: 24px; }
+  .statement-facts { gap: 32px; margin-bottom: 22px; }
+  .statement-facts dt { font-size: 40px; }
+  .statement-sign { margin-bottom: 20px; }
+  .statement .signature { font-size: 40px; }
+
+  .hero-collections { padding-top: 56px; padding-bottom: 56px; }
+  .hero-collections .reveal[style*="margin-bottom"] { margin-bottom: 24px !important; }
+
+  .process-band { padding: 64px 0 56px; }
+  .process-title { margin-bottom: 24px; }
+  .process-steps li, .process-steps li + li { padding: 16px 0; }
+  .process-steps h3 { font-size: 22px; margin-bottom: 6px; }
+  .process-steps p { font-size: 14px; line-height: 1.6; }
+
+  .home-closing { min-height: 0 !important; }
+  .home-closing .wrap { padding-top: 72px !important; padding-bottom: 80px !important; }
+
+  footer { padding: 56px 0 28px; }
+  footer .wrap > div:first-child { gap: 28px !important; padding-bottom: 28px !important; }
+  .foot-links-grid { grid-template-columns: 1fr 1fr !important; gap: 24px 20px !important; }
+  .foot-links-grid > div:last-child { grid-column: 1 / -1; }
+  .foot-bottom { margin-top: 24px; padding-top: 24px; gap: 12px; }
 }
