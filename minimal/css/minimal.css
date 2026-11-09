@@ -5,11 +5,13 @@
    white ground, espresso type, one brass accent for the page you're on.
    ======================================================== */
 :root {
-  --bg: #FBF8F4;
-  --ink: #2A2015;
-  --muted: #6E604D;
-  --accent: #8A6F4E;
-  --line: #E6DED2;
+  /* Deep espresso ground, cream type, a soft gold for the page you're
+     on. Muted text is 7:1 against the ground, gold 7:1, cream 14:1. */
+  --bg: #241B12;
+  --ink: #F2E8D4;
+  --muted: #B9AC97;
+  --accent: #C9A877;
+  --line: #3F3226;
   --side: 230px;
   --serif: 'Cormorant SC', 'Times New Roman', serif;
   --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -21,6 +23,9 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 :focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
 ::selection { background: var(--accent); color: var(--bg); }
+
+body { background: radial-gradient(120% 90% at 70% 0%, #2E2318 0%, #241B12 55%, #1C150E 100%) fixed var(--bg); }
+.form input::placeholder, .form textarea::placeholder { color: rgba(242,232,212,0.45); }
 
 /* ---------- Left column ---------- */
 .side { position: fixed; top: 0; left: 0; bottom: 0; width: var(--side); padding: 44px 0 40px 56px; display: flex; flex-direction: column; z-index: 10; }
@@ -107,7 +112,7 @@ a { color: inherit; text-decoration: none; }
 .form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .form-col { display: flex; flex-direction: column; gap: 10px; }
 .form input, .form textarea {
-  width: 100%; border: 0; border-bottom: 1px solid var(--line); background: rgba(230,222,210,0.35);
+  width: 100%; border: 0; border-bottom: 1px solid var(--line); background: rgba(242,232,212,0.06);
   padding: 12px 12px; font: inherit; font-size: 12px; color: var(--ink); outline: none; resize: none;
 }
 .form input:focus, .form textarea:focus { border-bottom-color: var(--accent); }
@@ -127,7 +132,7 @@ a { color: inherit; text-decoration: none; }
 /* ---------- Phones and small tablets ---------- */
 @media (max-width: 860px) {
   :root { --side: 0px; }
-  .side { position: sticky; top: 0; bottom: auto; width: 100%; padding: 18px 20px; background: rgba(251,248,244,0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+  .side { position: sticky; top: 0; bottom: auto; width: 100%; padding: 18px 20px; background: rgba(36,27,18,0.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
   .mark { margin: 0; }
   .mark-name { font-size: 17px; }
   .menu-toggle { display: block; border: 0; background: none; padding: 6px 0; font: inherit; font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink); cursor: pointer; }
