@@ -1022,7 +1022,10 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
    under the current name: no zoom, no sliding. */
 .showcase {
   --showcase-hold: 5.5s; /* keep in sync with HOLD_MS in js/site.js */
-  position: relative; height: 100vh; min-height: 620px; padding: 0;
+  /* svh = the screen height actually visible, so on phones the bottom
+     of the slideshow (the project names) never sits under the
+     browser's own toolbars. vh stays as the fallback. */
+  position: relative; height: 100vh; height: 100svh; min-height: 520px; padding: 0;
   overflow: hidden; background: var(--c-ink); color: #fff;
 }
 .showcase-slides { position: absolute; inset: 0; cursor: pointer; }
@@ -1057,7 +1060,7 @@ h1.port-hero-title { font-size: clamp(56px, 9vw, 120px); }
 /* Narrow screens: the list becomes a single current name, so it never
    crowds the photograph. */
 @media (max-width: 900px) {
-  .showcase-ticker { grid-template-columns: 1fr; padding-bottom: 36px; }
+  .showcase-ticker { grid-template-columns: 1fr; padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px)); }
   .showcase-ticker li { display: none; }
   .showcase-ticker li:has(a.is-active) { display: block; }
   .showcase-name { font-size: 26px; }
