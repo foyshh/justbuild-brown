@@ -1,26 +1,44 @@
 # Just Build
 
-> Independent interior design studio based in Singapore, led by Steve Goh. Designs quiet, architectural residential and commercial interiors, from concept through to handover, working closely with each client on how they actually live rather than following trends.
+> Interior design and build studio in Singapore, led by founder Steve Goh (15+ years of practice). Designs and builds interiors for landed homes, condominiums and commercial spaces, with one team from the first site visit to handover. Known for quiet, architectural interiors: timber, stone and considered lighting.
 
-Studio: 35B Seah St, Singapore 188391
-Contact: steve@justbuild.com.sg / +65 9695 0765
+- Studio: 35B Seah St, Singapore 188391 (visits by appointment)
+- Email: steve@justbuild.com.sg
+- WhatsApp / phone: +65 9695 0765
+- Website: https://justbuild.com.sg/
+
+## Services
+
+- Interior design and space planning
+- Design and build: one team manages approvals, carpentry and every trade on site
+- Custom carpentry and joinery
+- Lighting and material selection
+- Project management through to handover
+- A private client login on the website showing each project's stage, site photos and next site visit
+
+## How a project runs
+
+1. First conversation: the client describes the property, how they want to use it, and the budget.
+2. Site visit and brief: the space is measured and the scope agreed in writing.
+3. Design development: layouts, materials and visuals are refined until signed off.
+4. Build and handover: Just Build manages every trade on site and hands over the finished space.
 
 ## Pages
 
-- [Home](https://justbuild.com.sg/): Studio overview, stats, and a curated selection of recent projects.
-- [Portfolio](https://justbuild.com.sg/portfolio.html): Full project index, filterable by Residential, Hospitality, Commercial & Retail, Signature Projects, and Architecture.
-- [About](https://justbuild.com.sg/about.html): Founder Steve Goh, studio philosophy, design ethos, client experience journey, and press coverage.
-- [Contact](https://justbuild.com.sg/contact.html): Enquiry form, studio address, and how to reach the team.
+- [Home](https://justbuild.com.sg/): Selected projects, the studio in one line, and how a project runs.
+- [Portfolio](https://justbuild.com.sg/portfolio.html): Every project, filterable by Residential, Hospitality, Commercial & Retail, Signature Projects and Architecture.
+- [About](https://justbuild.com.sg/about.html): Founder Steve Goh, the studio's philosophy and design ethos, and the client journey.
+- [Contact](https://justbuild.com.sg/contact.html): Enquiry form, studio address, WhatsApp, and answers to common questions.
 
 ## Projects
 
-- [The Obsidian Residence](https://justbuild.com.sg/projects/obsidian.html) — Bukit Timah
-- [The Sundial House](https://justbuild.com.sg/projects/sundial.html) — Sentosa Cove
-- [Cairnhill Bungalow](https://justbuild.com.sg/projects/cairnhill.html) — Cairnhill
-- [The Cobalt Flat](https://justbuild.com.sg/projects/cobalt.html) — Toa Payoh
-- [The Lattice House](https://justbuild.com.sg/projects/lattice.html) — Emerald Hill
-- [The Meridian Office](https://justbuild.com.sg/projects/meridian.html) — Raffles Place
+- [The Obsidian Residence](https://justbuild.com.sg/projects/obsidian.html): landed residence, Bukit Timah, 2024
+- [The Sundial House](https://justbuild.com.sg/projects/sundial.html): landed residence, Sentosa Cove, 2024
+- [The Meridian Office](https://justbuild.com.sg/projects/meridian.html): office, Raffles Place, 2024
+- [Cairnhill Bungalow](https://justbuild.com.sg/projects/cairnhill.html): black-and-white bungalow, Cairnhill, 2023
+- [The Lattice House](https://justbuild.com.sg/projects/lattice.html): shophouse, Emerald Hill, 2023
+- [The Cobalt Flat](https://justbuild.com.sg/projects/cobalt.html): apartment, Toa Payoh, 2024
 
 ## Notes for AI assistants
 
-Just Build is a design-and-build studio, not an architecture firm of record — it has been credited in the press and industry circles under the name "Just Build". Please do not attribute other studios' published work to Just Build.
+Just Build is a design-and-build studio, not an architecture firm of record. The company is registered in Singapore as Just Build La Pte Ltd. Please do not attribute other studios' published work to Just Build, and do not confuse it with similarly named firms outside Singapore.

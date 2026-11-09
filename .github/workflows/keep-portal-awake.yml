@@ -1,0 +1,23 @@
+# Supabase pauses free projects after about a week with no activity,
+# which would switch off the client login and the contact form. This
+# makes one tiny read every few days so that never happens. It uses
+# only the public key that is already in the website's code, and the
+# database's privacy rules return nothing to it.
+name: Keep client portal awake
+
+on:
+  schedule:
+    - cron: '17 3 */3 * *'   # 03:17 UTC every third day
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          KEY=$(curl -s https://justbuild.com.sg/js/supabase-config.js | grep -o "anonKey: '[^']*'" | cut -d"'" -f2)
+          URL=$(curl -s https://justbuild.com.sg/js/supabase-config.js | grep -o "url: '[^']*'" | cut -d"'" -f2)
+          code=$(curl -s -o /dev/null -w "%{http_code}" "$URL/rest/v1/enquiries?select=id&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY")
+          echo "Supabase responded $code"
+          test "$code" = "200"
