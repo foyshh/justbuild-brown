@@ -1430,3 +1430,25 @@ footer address, footer a.plain { font-size: 14px; line-height: 1.7; }
    (data-shade-min on .home-scope), matching the "One studio" band. */
 .home-scope .statement::before { display: none; }
 .home-scope .backdrop-pin::after { background: none; }
+
+/* ========================================================
+   Phones: higher project name, calmer statement section
+   ======================================================== */
+@media (max-width: 700px) {
+  /* Project name sits well up from the bottom edge of the slideshow. */
+  .showcase-ticker { padding-bottom: calc(18vh + env(safe-area-inset-bottom, 0px)); }
+
+  /* "We make simple things look good": fewer elements, smaller type,
+     more air between them. */
+  .statement-inner { padding-top: 104px; padding-bottom: 96px; }
+  .statement-kicker { font-size: 14px; margin-bottom: 22px; }
+  .statement-title { font-size: 34px; line-height: 1.12; margin-bottom: 32px; }
+  .statement-caps { font-size: 0.86em; }
+  .statement-title em { margin-top: 6px; }
+  .statement .signature { font-size: 34px; }
+  .statement-sign { margin-bottom: 30px; }
+  .statement-sign-role { display: none; }
+
+  /* Section headings a size down on phones. */
+  body:not(.portal-page) h2.headline { font-size: 30px; line-height: 1.12; }
+}
