@@ -5,6 +5,9 @@
    keep each client's data private. Never put the "service_role" key
    here. */
 window.JB_SUPABASE = {
-  url: 'PASTE_PROJECT_URL_HERE',
-  anonKey: 'PASTE_ANON_PUBLIC_KEY_HERE'
+  // Usernames whose login uses a real email address instead of the
+  // private <username>@users.justbuild.com.sg one clients get.
+  logins: { steve: 'steve@justbuild.com.sg' },
+  url: 'https://znakmrkamhoiklfhmoem.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpuYWttcmthbWhvaWtsZmhtb2VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMDUxNzIsImV4cCI6MjEwOTc4MTE3Mn0.unf-LdBBFkRIa6c05Dpw166b14luq8ImgREa0VI98Wc'
 };

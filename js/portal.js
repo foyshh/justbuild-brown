@@ -33,7 +33,12 @@
 
   /* ---------- Helpers ---------- */
   const norm = (s) => String(s || '').trim().toLowerCase().replace(/\s+/g, '');
-  const emailFor = (username) => norm(username) + '@users.justbuild.com.sg';
+  const emailFor = (username) => {
+    const u = norm(username);
+    if (u.indexOf('@') > -1) return u;
+    if (cfg.logins && cfg.logins[u]) return cfg.logins[u];
+    return u + '@users.justbuild.com.sg';
+  };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmtDate = (iso, opts) => {
     if (!iso) return 'Not set';
