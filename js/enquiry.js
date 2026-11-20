@@ -29,6 +29,7 @@
         say('Sorry, your message didn’t send. Please try again, or email steve@justbuild.com.sg.');
         return;
       }
+      if (window.jbTrack) window.jbTrack('generate_lead', { method: 'contact_form', project_type: form.ftype.value });
       form.reset();
       say('Thank you. Your message has reached Steve, and he’ll be in touch shortly.', true);
     });

@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Just Build La">
-  <rect width="100" height="100" rx="18" fill="#17180F"/>
-  <rect x="26" y="26" width="48" height="10" fill="#FBFAF8"/>
-  <rect x="26" y="26" width="10" height="52" fill="#FBFAF8"/>
-  <rect x="64" y="26" width="10" height="52" fill="#FBFAF8"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Just Build"><rect width="100" height="100" rx="18" fill="#17180F"/><g fill="#F2E8D4"><polygon points="51.4,63.5 51.4,79.2 83.3,79.2 83.3,68.7"/><polygon points="48.6,63.5 16.7,68.7 16.7,79.2 48.6,79.2"/><polygon points="51.4,42.1 51.4,60.2 83.3,66.9 83.3,53.9"/><polygon points="48.6,42.1 39.1,45.8 39.1,62.2 48.6,60.2"/><polygon points="51.4,20.8 51.4,38.9 83.3,52.1 83.3,39.3"/><polygon points="48.6,20.8 16.7,39.3 16.7,52.1 48.6,38.9"/></g></svg>
